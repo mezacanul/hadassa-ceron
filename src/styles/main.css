@@ -1,0 +1,13 @@
+.hover-link {
+    transition: all ease 0.3s;
+    cursor: pointer;
+}
+
+.hover-link:hover {
+    text-decoration: underline;
+    /* font-weight: bold; */
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+    min-height: 0;
+}

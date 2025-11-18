@@ -1,0 +1,27 @@
+// pages/api/lashistas.js
+// import mysql from "mysql2/promise";
+// import { db_info } from "@/config/db";
+import pool from "@/backend/models/db";
+export default async function handler(req, res) {
+    // const connection = await mysql.createConnection({
+    //     host: db_info.host,
+    //     port: db_info.port,
+    //     user: db_info.user,
+    //     password: db_info.password,
+    //     database: db_info.database,
+    // });
+
+    try {
+        // Query the lashistas table
+        const [rows] = await pool.query(
+            "SELECT * FROM lashistas ORDER BY nombre ASC"
+        );
+        // Send the results as an array
+        res.status(200).json(rows);
+    } catch (error) {
+        res.status(500).json({ error });
+    } finally {
+        // Close the connection
+        //await connection.end();
+    }
+}
