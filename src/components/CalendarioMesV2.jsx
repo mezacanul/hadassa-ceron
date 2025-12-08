@@ -5,9 +5,28 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { useState, useEffect } from "react";
 import { loadHook } from "@/utils/lattice-design";
+import styled from "@emotion/styled";
+import { PickersCalendarHeader } from "@mui/x-date-pickers/PickersCalendarHeader";
 import "dayjs/locale/es";
-
 dayjs.locale("es");
+
+const CalendarOverrides = styled("div")({
+    // Hide Sunday weekday label (still safe)
+    ".MuiDayCalendar-weekDayLabel:nth-of-type(7)": {
+        display: "none",
+    },
+
+    // Hide ALL 7th children of each week container (buttons or divs)
+    ".MuiDayCalendar-weekContainer :nth-child(7)": {
+        display: "none",
+    },
+
+    ".MuiPickersCalendarHeader-label": {
+        fontSize: "1.2rem",
+        fontWeight: 700,
+        textTransform: "capitalize",
+    },
+});
 
 export default function CalendarioMesV2() {
     const pink = useToken("colors", "pink.600");
@@ -39,23 +58,25 @@ export default function CalendarioMesV2() {
                 dateAdapter={AdapterDayjs}
                 adapterLocale="es"
             >
-                <DateCalendar
-                    value={value}
-                    onChange={handleChange}
-                    shouldDisableDate={(d) => d.day() === 0}
-                    slotProps={{
-                        calendarHeader: {
-                            sx: {
-                                "& .MuiPickersCalendarHeader-label":
-                                    {
-                                        fontSize: "1.3rem",
-                                        fontWeight: 700,
-                                        color: pink,
-                                    },
+                <CalendarOverrides>
+                    <DateCalendar
+                        value={value}
+                        onChange={handleChange}
+                        shouldDisableDate={(d) =>
+                            d.day() === 0
+                        }
+                        slotProps={{
+                            calendarHeader: {
+                                sx: {
+                                    "& .MuiPickersCalendarHeader-label":
+                                        {
+                                            color: pink,
+                                        },
+                                },
                             },
-                        },
-                    }}
-                />
+                        }}
+                    />
+                </CalendarOverrides>
             </LocalizationProvider>
         </Box>
     );
