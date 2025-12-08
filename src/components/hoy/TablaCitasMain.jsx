@@ -179,16 +179,16 @@ function getColumnDefinitions(
                 fontSize: "1rem",
             },
         },
-        {
-            headerName: "Salida",
-            pinned: "left",
-            valueGetter: ({ data }) =>
-                addMinutesToTime(data.hora, data.minutos),
-            width: 80,
-            cellStyle: {
-                justifyContent: "center",
-            },
-        },
+        // {
+        //     headerName: "Salida",
+        //     pinned: "left",
+        //     valueGetter: ({ data }) =>
+        //         addMinutesToTime(data.hora, data.minutos),
+        //     width: 80,
+        //     cellStyle: {
+        //         justifyContent: "center",
+        //     },
+        // },
         {
             headerName: "Nombre",
             valueGetter: (params) =>

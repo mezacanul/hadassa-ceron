@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useToken } from "@chakra-ui/react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -10,6 +10,7 @@ import "dayjs/locale/es";
 dayjs.locale("es");
 
 export default function CalendarioMesV2() {
+    const pink = useToken("colors", "pink.600");
     const [value, setValue] = useState(dayjs());
     const [selectedDate, setSelectedDate] = loadHook(
         "useSelectedDate"
@@ -41,6 +42,19 @@ export default function CalendarioMesV2() {
                 <DateCalendar
                     value={value}
                     onChange={handleChange}
+                    shouldDisableDate={(d) => d.day() === 0}
+                    slotProps={{
+                        calendarHeader: {
+                            sx: {
+                                "& .MuiPickersCalendarHeader-label":
+                                    {
+                                        fontSize: "1.3rem",
+                                        fontWeight: 700,
+                                        color: pink,
+                                    },
+                            },
+                        },
+                    }}
                 />
             </LocalizationProvider>
         </Box>
