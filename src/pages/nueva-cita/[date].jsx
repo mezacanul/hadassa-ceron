@@ -3,7 +3,6 @@ import {
     Button,
     Heading,
     HStack,
-    Text,
     VStack,
     Card,
     Image,
@@ -12,20 +11,15 @@ import {
     GridItem,
     Spinner,
     Input,
-    Alert,
-    Select,
-    Portal,
-    createListCollection,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     loadHook,
     Singleton,
 } from "@/utils/lattice-design";
 import {
     formatFechaDMY,
-    formatHoyTitle,
     getDateObject,
 } from "@/utils/main";
 import axios from "axios";
@@ -34,7 +28,6 @@ import { FaMoneyBill } from "react-icons/fa";
 import OrderSummary from "@/components/agendar-cita/OrderSummary";
 import { CDN } from "@/config/cdn";
 import LashistaCard from "@/components/lashista/LashistaCard";
-import TablaClientas from "@/components/agendar-cita/SelectClientas/TablaClientas";
 import { SelectClientas } from "@/components/agendar-cita/SelectClientas";
 
 const useSearchServicio = Singleton("");
@@ -131,11 +124,7 @@ export default function NuevaCita() {
     }, [router.isReady, date]);
 
     return (
-        <Box
-            w={"100%"}
-            mb={"2rem"}
-            h={"85vh"}
-        >
+        <Box w={"100%"} mb={"2rem"} h={"85vh"}>
             <Heading
                 textAlign={
                     currentCita.servicio &&
@@ -160,10 +149,7 @@ export default function NuevaCita() {
             currentCita.horario &&
             currentPaso == "Confirmar" &&
             currentCita.clienta ? null : (
-                <Heading
-                    color={"pink.600"}
-                    mb={"2rem"}
-                >
+                <Heading color={"pink.600"} mb={"2rem"}>
                     Seleccionar {currentPaso}:
                 </Heading>
             )}
@@ -348,6 +334,13 @@ function SelectLashistas({ lashistas, selectedDate }) {
         // lashista_id: currentCita.lashista.id,
     };
 
+    const totalDisponibles = useMemo(() => {
+        if (!disponibles) return null;
+        return disponibles.reduce((acc, disp) => {
+            return acc + disp;
+        }, 0);
+    }, [disponibles]);
+
     useEffect(() => {
         const promises = [];
         lashistas.forEach((lsh) => {
@@ -364,6 +357,7 @@ function SelectLashistas({ lashistas, selectedDate }) {
                     return resp.data.length;
                 });
                 console.log(available);
+                console.log(lashistas);
                 setDisponibles(available);
             })
             .catch((error) => {
@@ -371,6 +365,21 @@ function SelectLashistas({ lashistas, selectedDate }) {
             });
         // console.log(promises);
     }, []);
+
+    if (totalDisponibles != null && totalDisponibles == 0) {
+        return (
+            <HStack
+                justify={"center"}
+                h={"30vh"}
+                align={"center"}
+                w={"100%"}
+            >
+                <Heading textAlign={"center"}>
+                    {"No hay lashistas disponibles"}
+                </Heading>
+            </HStack>
+        );
+    }
 
     return (
         <Grid
@@ -386,7 +395,10 @@ function SelectLashistas({ lashistas, selectedDate }) {
                     size={"lg"}
                 />
             )}
+
             {disponibles &&
+                totalDisponibles != null &&
+                totalDisponibles > 0 &&
                 lashistas.map((lashista, i) => {
                     return (
                         <GridItem
@@ -516,10 +528,7 @@ function SelectHorarios({ selectedDate }) {
             )}
 
             {horarios && horarios.length == 0 && (
-                <Heading
-                    w={"100%"}
-                    textAlign={"center"}
-                >
+                <Heading w={"100%"} textAlign={"center"}>
                     No hay horarios disponibles
                 </Heading>
             )}
@@ -575,10 +584,7 @@ function ServicioCard({ data }) {
             />
             <Box>
                 <Card.Body>
-                    <Card.Title
-                        mb="2"
-                        color={"pink.600"}
-                    >
+                    <Card.Title mb="2" color={"pink.600"}>
                         {data.servicio}
                         {data.tipo.includes("combo") && (
                             <Badge
