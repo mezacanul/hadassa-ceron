@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     try {
         // Query the lashistas table
         const [rows] = await pool.query(
-            "SELECT * FROM lashistas ORDER BY nombre ASC"
+            "SELECT * FROM lashistas WHERE isDeleted != 1 ORDER BY nombre ASC"
         );
         // Send the results as an array
         res.status(200).json(rows);
