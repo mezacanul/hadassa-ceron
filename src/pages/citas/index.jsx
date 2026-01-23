@@ -176,15 +176,15 @@ function AgendaLashista({ current }) {
                 axios.get(
                     `/api/detalles-citas?table=citas&length=full&period=future&lashista=${current.id}`
                 ),
-                axios.get(
-                    `/api/detalles-citas?table=citas&length=full&period=past&lashista=${current.id}`
-                ),
+                // axios.get(
+                //     `/api/detalles-citas?table=citas&length=full&period=past&lashista=${current.id}`
+                // ),
             ]).then(([thisWeekResp, futureResp, pastResp]) => {
                 console.log(thisWeekResp.data.citas);
 
                 setThisWeek(thisWeekResp.data.citas);
                 setFuture(futureResp.data.citas);
-                setPast(pastResp.data.citas);
+                // setPast(pastResp.data.citas);
             });
             console.log(current);
         }
@@ -210,12 +210,12 @@ function AgendaLashista({ current }) {
                 lashista={current}
                 data={future}
             />
-            <CitasInfo
+            {/* <CitasInfo
                 title={"Pasadas"}
                 dateInfo={`${dateInfo?.past} hacias atrás`}
                 lashista={current}
                 data={past}
-            />
+            /> */}
         </VStack>
     );
 }
