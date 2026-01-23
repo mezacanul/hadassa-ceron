@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
             switch (req.query.table) {
                 case "lashistas":
-                    query = "SELECT id, nombre, image as foto FROM lashistas";
+                    query = "SELECT id, nombre, image as foto FROM lashistas WHERE isDeleted != 1";
                     [rows] = await pool.query(query);
                     response = rows;
                     break;

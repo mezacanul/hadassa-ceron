@@ -45,7 +45,8 @@ export default async function handler(req, res) {
                     LEFT JOIN lashistas ON eventos.id_lashista = lashistas.id
                     WHERE 
                         fecha_init = ?
-                        AND status = 1`,
+                        AND status = 1
+                        AND lashistas.isDeleted != 1`,
                     [fecha]
                 );
                 res.status(200).json(rows);

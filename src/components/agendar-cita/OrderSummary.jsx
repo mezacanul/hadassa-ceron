@@ -21,7 +21,7 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     FaRegClock,
     FaRegSquareMinus,
@@ -61,6 +61,15 @@ export default function OrderSummary({
     const [loadingDescuentos, setLoadingDescuentos] =
         useState(false);
     const NextNav = useNextNav();
+
+    const canAgendar = useMemo(() => {
+        return (
+            currentCita.clienta &&
+            currentCita.servicio &&
+            currentCita.lashista &&
+            currentCita.horario
+        );
+    }, [currentCita]);
 
     useEffect(() => {
         if (currentCita.clienta) {
@@ -454,12 +463,7 @@ export default function OrderSummary({
             <CitaExito />
             {!citaID && agendarLoading != true && (
                 <Button
-                    // disabled={mp == []  ? false : true}
-                    // disabled={
-                    //     mp?.length == 0 || mp == null
-                    //         ? true
-                    //         : false
-                    // }
+                    disabled={!canAgendar}
                     onClick={handleAgendar}
                     size={"lg"}
                     bg={"pink.500"}
@@ -561,16 +565,9 @@ function CitaExito() {
     const [agendarLoading] = useAgendarLoading();
 
     return (
-        <VStack
-            gap={"1rem"}
-            align={"center"}
-            w={"100%"}
-        >
+        <VStack gap={"1rem"} align={"center"} w={"100%"}>
             {agendarLoading == true && (
-                <Spinner
-                    size={"md"}
-                    color={"pink.500"}
-                />
+                <Spinner size={"md"} color={"pink.500"} />
             )}
             {agendarLoading == false && (
                 <>
