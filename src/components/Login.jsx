@@ -7,12 +7,15 @@ import {
     Button,
     Image,
     Spinner,
+    Text,
 } from "@chakra-ui/react";
+import API from "@/services/main";
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = loadHook("useLoader");
     const [usuario, setUsuario] = loadHook("useUsuario");
+    const [error, setError] = useState(null);
 
     const [form, setForm] = useState({
         username: "",
@@ -28,11 +31,22 @@ export default function Login() {
     const handleSubmit = (e) => {
         // e.preventDefault();
         setIsLoading(true);
-        console.log(form);
-        setTimeout(() => {
-            // setIsLoading(false);
-            setUsuario(form);
-        }, 1000);
+        API.login
+            .iniciarSesion(form.username, form.password)
+            .then((resp) => {
+                console.log(resp);
+                setUsuario(resp.data);
+                localStorage.setItem(
+                    "usuario",
+                    JSON.stringify(resp.data)
+                );
+                setIsLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setError(err.response.data.error);
+                setIsLoading(false);
+            });
     };
     return (
         <VStack
@@ -91,6 +105,14 @@ export default function Login() {
                     >
                         {"Iniciar sesión"}
                     </Button>
+                )}
+                {error && (
+                    <Text
+                        textAlign={"center"}
+                        color={"red"}
+                    >
+                        {error}
+                    </Text>
                 )}
             </VStack>
         </VStack>
