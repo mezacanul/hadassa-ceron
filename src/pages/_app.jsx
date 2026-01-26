@@ -45,16 +45,29 @@ export default function App({ Component, pageProps }) {
     const [usuario, setUsuario] = loadHook("useUsuario");
 
     useEffect(() => {
-        API.horarios.getAll().then((horariosResp) => {
-            console.log("horariosResp", horariosResp);
-            setHorarios(horariosResp.data);
-        });
+        const localUser = localStorage.getItem("usuario");
+        console.log("localUser", localUser);
         setLoading(false);
-        API.clientas.getClientas().then((clientasResp) => {
-            console.log("clientasResp", clientasResp);
-            setClientas(clientasResp.data);
-        });
     }, []);
+
+    useEffect(() => {
+        if (usuario && usuario.username) {
+            API.horarios.getAll().then((horariosResp) => {
+                console.log("horariosResp", horariosResp);
+                setHorarios(horariosResp.data);
+            });
+            setLoading(false);
+            API.clientas
+                .getClientas()
+                .then((clientasResp) => {
+                    console.log(
+                        "clientasResp",
+                        clientasResp
+                    );
+                    setClientas(clientasResp.data);
+                });
+        }
+    }, [usuario]);
 
     return (
         <Provider>
@@ -83,10 +96,10 @@ export default function App({ Component, pageProps }) {
                     >
                         <Component {...pageProps} />
                     </VStack>
-                    <Loader loading={loading} />
                     <Sidebar />
                 </Box>
             )}
+            <Loader loading={loading} />
         </Provider>
     );
 }
