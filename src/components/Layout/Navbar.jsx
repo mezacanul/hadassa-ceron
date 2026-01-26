@@ -15,11 +15,13 @@ import {
     Text,
     Grid,
     Link,
+    useToken,
 } from "@chakra-ui/react";
 import { LuCalendarPlus } from "react-icons/lu";
 import { FaHouseChimney } from "react-icons/fa6";
 import { format, parse } from "date-fns";
 import NavbarItem from "@/components/Layout/NavbarItem";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function NavBar({ h }) {
     const [selectedDate] = loadHook("useSelectedDate");
@@ -28,7 +30,8 @@ export default function NavBar({ h }) {
     const [events] = loadHook("useEvents");
     const [loading, setLoading] = loadHook("useLoader");
     const [DOM, setDOM] = loadHook("useDOM");
-
+    const pink = useToken("colors", "pink.500");
+    const [_, setSidebarOpen] = loadHook("useSidebarOpen");
     const [citaID, setCitaID] = useCitaID();
     const [mp, setMp] = useMetodoPago();
     const [agendarLoading, setAgendarLoading] =
@@ -134,19 +137,20 @@ export default function NavBar({ h }) {
 
             <HStack
                 w={"100%"}
-                justify={"space-between"}
+                justify={"flex-end"}
                 align={"center"}
             >
-                {NavBarLinks.map((link) => (
-                    <NavbarItem
-                        key={link.title}
-                        title={link.title}
-                        pathname={link.pathname}
-                    />
-                ))}
-                {/* <Button bg={"#ec4899"} size={"xs"}>
-                    <RxHamburgerMenu />
-                </Button> */}
+                <RxHamburgerMenu
+                    onClick={() => {
+                        setSidebarOpen(true);
+                    }}
+                    style={{
+                        color: pink,
+                        cursor: "pointer",
+                    }}
+                    size={"1.8rem"}
+                />
+                {/* </Button> */}
             </HStack>
         </Grid>
     );

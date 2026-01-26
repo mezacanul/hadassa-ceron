@@ -18,6 +18,8 @@ import "@/styles/Tables.css";
 import "@/styles/main.css";
 import API from "@/services/main";
 import NavBar from "@/components/Layout/Navbar";
+import Login from "@/components/Login";
+import Sidebar from "@/components/Sidebar";
 
 // import 'ag-grid-community/styles/ag-grid.css'
 // import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -31,6 +33,8 @@ Nexus({
     useLoader: Singleton(true),
     useClientas: Singleton(null),
     useHorarios: Singleton(null),
+    useUsuario: Singleton(null),
+    useSidebarOpen: Singleton(false),
 });
 
 export default function App({ Component, pageProps }) {
@@ -38,6 +42,7 @@ export default function App({ Component, pageProps }) {
     const [loading, setLoading] = loadHook("useLoader");
     const [clientas, setClientas] = loadHook("useClientas");
     const [horarios, setHorarios] = loadHook("useHorarios");
+    const [usuario, setUsuario] = loadHook("useUsuario");
 
     useEffect(() => {
         API.horarios.getAll().then((horariosResp) => {
@@ -55,28 +60,33 @@ export default function App({ Component, pageProps }) {
         <Provider>
             <Head>
                 <title>{DOM.title}</title>
-                <link
-                    rel="icon"
-                    href="/favicon.png"
-                />
+                <link rel="icon" href="/favicon.png" />
             </Head>
 
-            <Box
-                bg={"#f1f5ff"}
-                h={loading ? "100vh" : "initial"}
-                overflow={loading ? "hidden" : "default"}
-            >
-                <NavBar h={"11vh"} />
-                <VStack
-                    id="Body"
-                    px={"2rem"}
-                    py={"2.5rem"}
-                    minH={"90vh"}
+            {!usuario ? (
+                <Login />
+            ) : (
+                <Box
+                    bg={"#f1f5ff"}
+                    h={loading ? "100vh" : "initial"}
+                    overflow={
+                        loading ? "hidden" : "default"
+                    }
+                    position={"relative"}
                 >
-                    <Component {...pageProps} />
-                </VStack>
-                <Loader loading={loading} />
-            </Box>
+                    <NavBar h={"11vh"} />
+                    <VStack
+                        id="Body"
+                        px={"2rem"}
+                        py={"2.5rem"}
+                        minH={"90vh"}
+                    >
+                        <Component {...pageProps} />
+                    </VStack>
+                    <Loader loading={loading} />
+                    <Sidebar />
+                </Box>
+            )}
         </Provider>
     );
 }
