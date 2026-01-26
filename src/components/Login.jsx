@@ -31,6 +31,7 @@ export default function Login() {
     const handleSubmit = (e) => {
         // e.preventDefault();
         setIsLoading(true);
+        setError(null);
         API.login
             .iniciarSesion(form.username, form.password)
             .then((resp) => {
