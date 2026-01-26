@@ -90,8 +90,8 @@ export default function NavBar({ h }) {
             borderBottom={"2px solid #ec4899"}
         >
             <HStack
-                gap={"0.5rem"}
-                justify={"space-between"}
+                gap={"2rem"}
+                // justify={"space-between"}
             >
                 {router.pathname == "/" && (
                     <FechaLogo
@@ -108,7 +108,7 @@ export default function NavBar({ h }) {
                     </Heading>
                 )}
                 {/* format(info.date, "yyyy-MM-dd"); */}
-                {router.pathname == "/" ? (
+                {router.pathname == "/" && (
                     <Button
                         bg={"pink.500"}
                         onClick={goToAgendar}
@@ -118,18 +118,6 @@ export default function NavBar({ h }) {
                                 fontSize={"1rem"}
                             >{`Agendar`}</Text>
                             <LuCalendarPlus />
-                        </HStack>
-                    </Button>
-                ) : (
-                    <Button
-                        onClick={goToInicio}
-                        bg={"pink.500"}
-                    >
-                        <HStack>
-                            <Text
-                                fontSize={"1rem"}
-                            >{`Inicio`}</Text>
-                            <FaHouseChimney />
                         </HStack>
                     </Button>
                 )}
