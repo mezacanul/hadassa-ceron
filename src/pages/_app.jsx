@@ -18,6 +18,8 @@ import "@/styles/Tables.css";
 import "@/styles/main.css";
 import API from "@/services/main";
 import NavBar from "@/components/Layout/Navbar";
+import Login from "@/components/Login";
+import Sidebar from "@/components/Sidebar";
 
 // import 'ag-grid-community/styles/ag-grid.css'
 // import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -31,6 +33,8 @@ Nexus({
     useLoader: Singleton(true),
     useClientas: Singleton(null),
     useHorarios: Singleton(null),
+    useUsuario: Singleton(null),
+    useSidebarOpen: Singleton(false),
 });
 
 export default function App({ Component, pageProps }) {
@@ -38,45 +42,68 @@ export default function App({ Component, pageProps }) {
     const [loading, setLoading] = loadHook("useLoader");
     const [clientas, setClientas] = loadHook("useClientas");
     const [horarios, setHorarios] = loadHook("useHorarios");
+    const [usuario, setUsuario] = loadHook("useUsuario");
 
     useEffect(() => {
-        API.horarios.getAll().then((horariosResp) => {
-            console.log("horariosResp", horariosResp);
-            setHorarios(horariosResp.data);
-        });
+        const localUser = JSON.parse(
+            localStorage.getItem("usuario")
+        );
+        if (localUser) {
+            setUsuario(localUser);
+        }
         setLoading(false);
-        API.clientas.getClientas().then((clientasResp) => {
-            console.log("clientasResp", clientasResp);
-            setClientas(clientasResp.data);
-        });
     }, []);
+
+    useEffect(() => {
+        if (usuario && usuario.username) {
+            API.horarios.getAll().then((horariosResp) => {
+                console.log("horariosResp", horariosResp);
+                setHorarios(horariosResp.data);
+            });
+            setLoading(false);
+            API.clientas
+                .getClientas()
+                .then((clientasResp) => {
+                    console.log(
+                        "clientasResp",
+                        clientasResp
+                    );
+                    setClientas(clientasResp.data);
+                });
+        }
+    }, [usuario]);
 
     return (
         <Provider>
             <Head>
                 <title>{DOM.title}</title>
-                <link
-                    rel="icon"
-                    href="/favicon.png"
-                />
+                <link rel="icon" href="/favicon.png" />
             </Head>
 
-            <Box
-                bg={"#f1f5ff"}
-                h={loading ? "100vh" : "initial"}
-                overflow={loading ? "hidden" : "default"}
-            >
-                <NavBar h={"11vh"} />
-                <VStack
-                    id="Body"
-                    px={"2rem"}
-                    py={"2.5rem"}
-                    minH={"90vh"}
+            {!usuario ? (
+                <Login />
+            ) : (
+                <Box
+                    bg={"#f1f5ff"}
+                    h={loading ? "100vh" : "initial"}
+                    overflow={
+                        loading ? "hidden" : "default"
+                    }
+                    position={"relative"}
                 >
-                    <Component {...pageProps} />
-                </VStack>
-                <Loader loading={loading} />
-            </Box>
+                    <NavBar h={"11vh"} />
+                    <VStack
+                        id="Body"
+                        px={"2rem"}
+                        py={"2.5rem"}
+                        minH={"90vh"}
+                    >
+                        <Component {...pageProps} />
+                    </VStack>
+                    <Sidebar />
+                </Box>
+            )}
+            <Loader loading={loading} />
         </Provider>
     );
 }
@@ -89,7 +116,7 @@ function Loader({ loading }) {
             w={"100vw"}
             h={"100vh"}
             bg={"white"}
-            zIndex={10}
+            zIndex={100}
             top={0}
             left={0}
         >
