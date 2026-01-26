@@ -35,12 +35,16 @@ export default function Login() {
             .iniciarSesion(form.username, form.password)
             .then((resp) => {
                 console.log(resp);
-                setUsuario(resp.data);
-                localStorage.setItem(
-                    "usuario",
-                    JSON.stringify(resp.data)
-                );
-                setIsLoading(false);
+                setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                    setUsuario(resp.data);
+                    localStorage.setItem(
+                        "usuario",
+                        JSON.stringify(resp.data)
+                    );
+                    setIsLoading(false);
+                }, 500);
             })
             .catch((err) => {
                 console.log(err);

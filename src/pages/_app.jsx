@@ -45,8 +45,12 @@ export default function App({ Component, pageProps }) {
     const [usuario, setUsuario] = loadHook("useUsuario");
 
     useEffect(() => {
-        const localUser = localStorage.getItem("usuario");
-        console.log("localUser", localUser);
+        const localUser = JSON.parse(
+            localStorage.getItem("usuario")
+        );
+        if (localUser) {
+            setUsuario(localUser);
+        }
         setLoading(false);
     }, []);
 
@@ -112,7 +116,7 @@ function Loader({ loading }) {
             w={"100vw"}
             h={"100vh"}
             bg={"white"}
-            zIndex={10}
+            zIndex={100}
             top={0}
             left={0}
         >

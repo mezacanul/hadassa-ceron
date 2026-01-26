@@ -32,7 +32,7 @@ export default function Sidebar() {
             // justify={"space-between"}
             top={0}
             bg={"pink.600"}
-            zIndex={100}
+            zIndex={10}
             right={0}
             bottom={0}
             w={sidebarOpen ? "40vw" : "0"}
@@ -73,9 +73,16 @@ function MenuItems() {
 function LogoutButton() {
     const [usuario, setUsuario] = loadHook("useUsuario");
     const [_, setSidebarOpen] = loadHook("useSidebarOpen");
+    const [loading, setLoading] = loadHook("useLoader");
+
     const handleLogout = () => {
-        setUsuario(null);
         setSidebarOpen(false);
+        setLoading(true);
+        setTimeout(() => {
+            setUsuario(null);
+            localStorage.removeItem("usuario");
+            setLoading(false);
+        }, 500);
     };
 
     return (
