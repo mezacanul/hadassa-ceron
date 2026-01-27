@@ -9,6 +9,7 @@ import {
 import { useState, useEffect } from "react";
 import { IoMdClose, IoMdExit } from "react-icons/io";
 import NavbarItem from "./Layout/NavbarItem";
+import LogoutButton from "./common/LogoutButton";
 
 export default function Sidebar() {
     const [showMenu, setShowMenu] = useState(false);
@@ -70,39 +71,6 @@ function MenuItems() {
     );
 }
 
-function LogoutButton() {
-    const [usuario, setUsuario] = loadHook("useUsuario");
-    const [_, setSidebarOpen] = loadHook("useSidebarOpen");
-    const [loading, setLoading] = loadHook("useLoader");
-
-    const handleLogout = () => {
-        setSidebarOpen(false);
-        setLoading(true);
-        setTimeout(() => {
-            setUsuario(null);
-            localStorage.removeItem("usuario");
-            setLoading(false);
-        }, 500);
-    };
-
-    return (
-        <Button
-            bg="white"
-            color="pink.500"
-            w={"70%"}
-            fontWeight={"bold"}
-            p={"1rem"}
-            borderRadius={"0.5rem"}
-            shadow={"sm"}
-            onClick={handleLogout}
-        >
-            <HStack>
-                <Text>{"Cerrar sesión"}</Text>
-                <IoMdExit />
-            </HStack>
-        </Button>
-    );
-}
 function CloseButton() {
     const [_, setSidebarOpen] = loadHook("useSidebarOpen");
     const [isHover, setIsHover] = useState(false);
