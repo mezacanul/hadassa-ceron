@@ -125,10 +125,18 @@ export default function NavBar({ h }) {
 
             <HStack
                 w={"100%"}
+                gap={"1rem"}
                 justify={"flex-end"}
                 align={"center"}
             >
-                <RxHamburgerMenu
+                {NavBarLinks.map((link) => (
+                    <NavbarItem
+                        key={link.title}
+                        title={link.title}
+                        pathname={link.pathname}
+                    />
+                ))}
+                {/* <RxHamburgerMenu
                     onClick={() => {
                         setSidebarOpen(true);
                     }}
@@ -137,14 +145,17 @@ export default function NavBar({ h }) {
                         cursor: "pointer",
                     }}
                     size={"1.8rem"}
-                />
-                {/* </Button> */}
+                /> */}
             </HStack>
         </Grid>
     );
 }
 
 const NavBarLinks = [
+    {
+        title: "Admin",
+        pathname: "/admin",
+    },
     {
         title: "Citas",
         pathname: "/citas",
@@ -165,6 +176,10 @@ const NavBarLinks = [
         title: "Disponibilidad",
         pathname: "/disponibilidad",
     },
+    {
+        title: "Inicio",
+        pathname: "/",
+    },
 ];
 
 const PathnameToTitle = {
@@ -179,6 +194,7 @@ const PathnameToTitle = {
     "/servicios": "Servicios",
     "/servicios/[servicioID]": "Servicio",
     "/disponibilidad": "Disponibilidad",
+    "/admin": "Administración",
     "/dev": "Developer",
 };
 
@@ -193,26 +209,27 @@ const PathnameToHeading = {
     "/servicios": "Servicios",
     "/servicios/[servicioID]": "Servicio",
     "/disponibilidad": "Disponibilidad",
+    "/admin": "Administración",
     "/dev": "Developer",
 };
 
-function NavbarLink({ title, pathname }) {
-    const [_, setLoading] = loadHook("useLoader");
-    const NextNav = useNextNav();
-    return (
-        <Text
-            fontSize={"md"}
-            // fontWeight={600}
-        >
-            <Link
-                onClick={() => {
-                    setLoading(true);
-                    NextNav.push(pathname);
-                }}
-                color={"#ec4899"}
-            >
-                {title}
-            </Link>
-        </Text>
-    );
-}
+// function NavbarLink({ title, pathname }) {
+//     const [_, setLoading] = loadHook("useLoader");
+//     const NextNav = useNextNav();
+//     return (
+//         <Text
+//             fontSize={"md"}
+//             // fontWeight={600}
+//         >
+//             <Link
+//                 onClick={() => {
+//                     setLoading(true);
+//                     NextNav.push(pathname);
+//                 }}
+//                 color={"#ec4899"}
+//             >
+//                 {title}
+//             </Link>
+//         </Text>
+//     );
+// }
