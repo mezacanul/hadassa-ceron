@@ -62,6 +62,13 @@ export default function OrderSummary({
         useState(false);
     const NextNav = useNextNav();
 
+    useEffect(() => {
+        return () => {
+            setCitaID(null);
+            setAgendarLoading(null);
+        };
+    }, []);
+
     const canAgendar = useMemo(() => {
         return (
             currentCita.clienta &&
