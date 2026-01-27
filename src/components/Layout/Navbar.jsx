@@ -153,6 +153,10 @@ export default function NavBar({ h }) {
 
 const NavBarLinks = [
     {
+        title: "Inicio",
+        pathname: "/",
+    },
+    {
         title: "Admin",
         pathname: "/admin",
     },
@@ -175,10 +179,6 @@ const NavBarLinks = [
     {
         title: "Disponibilidad",
         pathname: "/disponibilidad",
-    },
-    {
-        title: "Inicio",
-        pathname: "/",
     },
 ];
 
