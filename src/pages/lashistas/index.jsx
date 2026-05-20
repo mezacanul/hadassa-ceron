@@ -11,6 +11,7 @@ import {
   Image,
   Table,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ export default function Lashistas() {
 
   useEffect(() => {
     axios.get("/api/lashistas").then((lashistasResp) => {
-    //   console.log(lashistasResp.data);
+      //   console.log(lashistasResp.data);
       setLashistas(lashistasResp.data);
       setLoading(false);
     });
@@ -45,7 +46,7 @@ export default function Lashistas() {
         </Button>
 
         <ModalNuevaLashista open={open} setOpen={setOpen} />
-        
+
         {lashistas && (
           <LashistasTable lashistas={lashistas} />
         )}
@@ -112,15 +113,17 @@ function LashistaRow({ lashista }) {
       }}
     >
       <Table.Cell py={"1rem"}>
-        <Image
-          borderRadius={"50%"}
-          w={"6rem"}
-          // rounded={"md"}
-          src={`${CDN}/img/lashistas/${lashista.image}`}
-        />
+        <VStack alignItems={"center"}>
+          <Image
+            borderRadius={"50%"}
+            w={"4rem"}
+            // rounded={"md"}
+            src={`${CDN}/img/lashistas/${lashista.image}`}
+          />
+        </VStack>
       </Table.Cell>
       <Table.Cell>
-        <Heading size={"lg"}>{lashista.nombre}</Heading>
+        <Heading size={"md"}>{lashista.nombre}</Heading>
       </Table.Cell>
       <Table.Cell>
         {horariosLV.map((hr) => {
@@ -140,9 +143,6 @@ function LashistaRow({ lashista }) {
       <Table.Cell fontWeight={700}>
         {capitalizeFirst(lashista.rol)}
       </Table.Cell>
-      {/* <Table.Cell>
-                            <Button bg={"pink.500"}>Editar</Button>
-                        </Table.Cell> */}
     </Table.Row>
   );
 }
