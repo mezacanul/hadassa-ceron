@@ -35,8 +35,8 @@ function timeToMeridiem(time) {
 function getTimeSlotOptions(
   start,
   end,
-  meridiem = false,
-  includeLast = false
+  includeLast = false,
+  // meridiem = false,
 ) {
   const slots = [];
 
@@ -62,7 +62,7 @@ function getTimeSlotOptions(
     current += 30;
   }
 
-  console.log("slots", slots);
+  // console.log("slots", slots);
   return slots;
 }
 

@@ -26,7 +26,7 @@ export default function Lashistas() {
 
   useEffect(() => {
     axios.get("/api/lashistas").then((lashistasResp) => {
-      console.log(lashistasResp.data);
+    //   console.log(lashistasResp.data);
       setLashistas(lashistasResp.data);
       setLoading(false);
     });
@@ -99,9 +99,6 @@ function LashistaRow({ lashista }) {
 
   const horariosLV = JSON.parse(lashista.horarioLV);
 
-  useEffect(() => {
-    console.log("lsh", lashista);
-  }, []);
   return (
     <Table.Row
       _hover={{
