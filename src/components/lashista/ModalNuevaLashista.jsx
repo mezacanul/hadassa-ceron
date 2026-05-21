@@ -10,23 +10,25 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import ConfigurationService from "@/services/configuration";
-import { getTimeSlotOptions } from "@/utils/time";
+import {
+  getTimeSlotOptions,
+  timeToMinutes,
+} from "@/utils/time";
 import { SelectDefault } from "../common/SelectDefault";
 import { lashistaSchema } from "@/backend/schema/lashista.schema";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const defaultHorario = {
-  entrada: "",
-  salida: "",
-};
-
 const defaultLashistaForm = {
   nombre: "",
   email: "",
   password: "",
-  horarioLV: defaultHorario,
-  horarioSBD: defaultHorario,
+  horarioLV_entrada: "",
+  horarioLV_salida: "",
+  horarioLV_extra_entrada: undefined,
+  horarioLV_extra_salida: undefined,
+  horarioSBD_entrada: "",
+  horarioSBD_salida: "",
 };
 
 export default function ModalNuevaLashista({
@@ -35,6 +37,9 @@ export default function ModalNuevaLashista({
 }) {
   const {
     register,
+    watch,
+    reset,
+    setValue,
     handleSubmit,
     formState: { errors },
     control,
@@ -43,17 +48,43 @@ export default function ModalNuevaLashista({
     defaultValues: defaultLashistaForm,
     mode: "onBlur",
   });
+  const isSetHorarioLV_entrada = watch("horarioLV_entrada");
+  const isSetHorarioExtraLV_entrada = watch(
+    "horarioLV_extra_entrada"
+  );
+  const isSetHorarioSBD_entrada = watch(
+    "horarioSBD_entrada"
+  );
 
-  const [extraHorarioLV, setExtraHorarioLV] =
-    useState(null);
+  useEffect(() => {
+    console.log(
+      "isSetHorarioLV_entrada",
+      isSetHorarioLV_entrada
+    );
+    console.log(
+      "isSetHorarioExtraLV_entrada",
+      isSetHorarioExtraLV_entrada
+    );
+    console.log(
+      "isSetHorarioSBD_entrada",
+      isSetHorarioSBD_entrada
+    );
+  }, [
+    isSetHorarioLV_entrada,
+    isSetHorarioExtraLV_entrada,
+    isSetHorarioSBD_entrada,
+  ]);
+
+  const [horarioExtraLV, setHorarioExtraLV] =
+    useState(false);
   const [horarioOptions, setHorarioOptions] = useState({
     lv: [],
     sbd: [],
   });
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  // useEffect(() => {
+  //   console.log(errors);
+  // }, [errors]);
 
   useEffect(() => {
     ConfigurationService.getByDomain("horario").then(
@@ -62,11 +93,13 @@ export default function ModalNuevaLashista({
         const horariosObj = {
           lv: getTimeSlotOptions(
             response.lv[0],
-            response.lv[1]
+            response.lv[1],
+            true
           ),
           sbd: getTimeSlotOptions(
             response.sbd[0],
-            response.sbd[1]
+            response.sbd[1],
+            true
           ),
         };
         console.log("horariosObj", horariosObj);
@@ -77,6 +110,33 @@ export default function ModalNuevaLashista({
 
   const handleSave = (data) => {
     console.log(data);
+    const {
+      horarioLV_entrada,
+      horarioLV_salida,
+      horarioLV_extra_entrada,
+      horarioLV_extra_salida,
+      horarioSBD_entrada,
+      horarioSBD_salida,
+    } = data;
+
+    const horarioLV = [
+      `${horarioLV_entrada} - ${horarioLV_salida}`,
+    ];
+    if (horarioLV_extra_entrada && horarioLV_extra_salida) {
+      horarioLV.push(
+        `${horarioLV_extra_entrada} - ${horarioLV_extra_salida}`
+      );
+    }
+    const horarioSBD = `${horarioSBD_entrada} - ${horarioSBD_salida}`;
+
+    let payload = {
+      nombre: data.nombre,
+      email: data.email,
+      password: data.password,
+      horarioLV: JSON.stringify(horarioLV),
+      horarioSBD,
+    };
+    console.log("payload", payload);
     // console.log(lashistaForm);
     // const { inicio: inicioLV, cierre: cierreLV } =
     //   lashistaForm.horarioLV;
@@ -96,13 +156,57 @@ export default function ModalNuevaLashista({
     // console.log("formattedHorarioSBD", formattedHorarioSBD);
   };
 
-  const handleAddExtraHorarioLV = () => {
-    setExtraHorarioLV(defaultHorario);
+  const handleAddHorarioExtraLV = () => {
+    setHorarioExtraLV(true);
+    setValue("horarioLV_extra_entrada", "");
+    setValue("horarioLV_extra_salida", "");
   };
 
-  const handleDeleteExtraHorarioLV = () => {
-    setExtraHorarioLV(null);
+  const handleDeleteHorarioExtraLV = () => {
+    setHorarioExtraLV(false);
+    setValue("horarioLV_extra_entrada", undefined);
+    setValue("horarioLV_extra_salida", undefined);
   };
+
+  const handleOpenChange = (e) => {
+    setOpen(e.open);
+    if (e.open == false) {
+      setTimeout(() => {
+        reset();
+        setHorarioExtraLV(false);
+      }, 500);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    reset();
+    setHorarioExtraLV(false);
+  };
+
+  function isValidHorarioLV(errors) {
+    return (
+      !errors.horarioLV_entrada &&
+      !errors.horarioLV_salida &&
+      !errors.horarioLV_extra_entrada &&
+      !errors.horarioLV_extra_salida
+    );
+  }
+
+  function isValidHorarioSBD(errors) {
+    return (
+      !errors.horarioSBD_entrada &&
+      !errors.horarioSBD_salida
+    );
+  }
+
+  function filterOptionsByStartTime(options, startTime) {
+    return options.filter(
+      (h) =>
+        timeToMinutes(h.value) >
+        timeToMinutes(watch(startTime))
+    );
+  }
 
   return (
     <Dialog.Root
@@ -110,7 +214,7 @@ export default function ModalNuevaLashista({
       placement="center"
       lazyMount
       open={open}
-      onOpenChange={(e) => setOpen(e.open)}
+      onOpenChange={handleOpenChange}
     >
       <Portal>
         <Dialog.Backdrop />
@@ -132,7 +236,9 @@ export default function ModalNuevaLashista({
                 maxH={"50vh"}
                 overflowY={"auto"}
               >
+                {/* Formulario de nueva lashista */}
                 <VStack w={"100%"} gap={"2rem"}>
+                  {/* Inputs de nombre, email y contraseña */}
                   <Grid
                     w={"100%"}
                     gridTemplateColumns={"1fr 1fr"}
@@ -156,9 +262,12 @@ export default function ModalNuevaLashista({
                     />
                   </Grid>
 
+                  {/* Errores de los inputs de nombre, email y contraseña */}
                   <ErrorContainer errors={errors} />
 
                   <VStack w={"100%"} gap={"1rem"}>
+                    {/* Titulo de la seccion de horarios
+                    De Lunes a Viernes */}
                     <HStack
                       w={"100%"}
                       gap={"1rem"}
@@ -170,7 +279,7 @@ export default function ModalNuevaLashista({
                       >
                         Horario De Lunes a Viernes
                       </Text>
-                      {errors.horarioLV_entrada && (
+                      {!isValidHorarioLV(errors) && (
                         <Text
                           fontSize={"0.8rem"}
                           color={"red"}
@@ -180,6 +289,7 @@ export default function ModalNuevaLashista({
                       )}
                     </HStack>
 
+                    {/* Selectores de horarios De Lunes a Viernes */}
                     <HStack w={"100%"} gap={"1rem"}>
                       <SelectDefault
                         label="Entrada"
@@ -193,20 +303,29 @@ export default function ModalNuevaLashista({
                       <SelectDefault
                         label="Salida"
                         placeholder="Selecciona un horario"
-                        options={horarioOptions.lv}
+                        options={filterOptionsByStartTime(
+                          horarioOptions.lv,
+                          "horarioLV_entrada"
+                        )}
                         spreadProps={register(
                           "horarioLV_salida"
                         )}
                         error={errors.horarioLV_salida}
+                        // disabled={!horarioExtraLV}
+                        disabled={!isSetHorarioLV_entrada}
                       />
                     </HStack>
 
-                    {extraHorarioLV && (
+                    {/* Selectores de horarios extra De Lunes a Viernes */}
+                    {horarioExtraLV && (
                       <HStack w={"100%"} gap={"1rem"}>
                         <SelectDefault
                           label="Entrada"
                           placeholder="Selecciona un horario"
-                          options={horarioOptions.lv}
+                          options={filterOptionsByStartTime(
+                            horarioOptions.lv,
+                            "horarioLV_salida"
+                          )}
                           spreadProps={register(
                             "horarioLV_extra_entrada"
                           )}
@@ -217,39 +336,48 @@ export default function ModalNuevaLashista({
                         <SelectDefault
                           label="Salida"
                           placeholder="Selecciona un horario"
-                          options={horarioOptions.lv}
+                          options={filterOptionsByStartTime(
+                            horarioOptions.lv,
+                            "horarioLV_extra_entrada"
+                          )}
                           spreadProps={register(
                             "horarioLV_extra_salida"
                           )}
                           error={
                             errors.horarioLV_extra_salida
                           }
+                          disabled={
+                            !isSetHorarioExtraLV_entrada
+                          }
                         />
                       </HStack>
                     )}
 
+                    {/* Botones de agregar y eliminar horarios extra De Lunes a Viernes */}
                     <HStack w={"100%"} gap={"0.5rem"}>
                       <Button
-                        onClick={handleDeleteExtraHorarioLV}
+                        onClick={handleDeleteHorarioExtraLV}
                         fontSize={"1.2rem"}
                         bg={"blue.600"}
                         _hover={{ bg: "blue.700" }}
-                        disabled={!extraHorarioLV}
+                        disabled={!horarioExtraLV}
                       >
                         {"-"}
                       </Button>
                       <Button
-                        onClick={handleAddExtraHorarioLV}
+                        onClick={handleAddHorarioExtraLV}
                         fontSize={"1.2rem"}
                         bg={"blue.600"}
                         _hover={{ bg: "blue.700" }}
-                        disabled={extraHorarioLV}
+                        disabled={horarioExtraLV}
                       >
                         {"+"}
                       </Button>
                     </HStack>
                   </VStack>
 
+                  {/* Titulo de la seccion de horarios
+                  De Sabado */}
                   <VStack w={"100%"} gap={"1rem"}>
                     <HStack
                       w={"100%"}
@@ -262,7 +390,7 @@ export default function ModalNuevaLashista({
                       >
                         Horario De Sabado
                       </Text>
-                      {errors.horarioSBD_entrada && (
+                      {!isValidHorarioSBD(errors) && (
                         <Text
                           fontSize={"0.8rem"}
                           color={"red"}
@@ -272,6 +400,7 @@ export default function ModalNuevaLashista({
                       )}
                     </HStack>
 
+                    {/* Selectores de horarios De Sabado */}
                     <HStack w={"100%"} gap={"1rem"}>
                       <SelectDefault
                         label="Entrada"
@@ -285,11 +414,16 @@ export default function ModalNuevaLashista({
                       <SelectDefault
                         label="Salida"
                         placeholder="Selecciona un horario"
-                        options={horarioOptions.sbd}
+                        // options={horarioOptions.sbd}
+                        options={filterOptionsByStartTime(
+                          horarioOptions.sbd,
+                          "horarioSBD_entrada"
+                        )}
                         spreadProps={register(
                           "horarioSBD_salida"
                         )}
                         error={errors.horarioSBD_salida}
+                        disabled={!isSetHorarioSBD_entrada}
                       />
                     </HStack>
                   </VStack>
@@ -306,7 +440,7 @@ export default function ModalNuevaLashista({
                 <Button
                   bg={"gray"}
                   _hover={{ bg: "gray.600" }}
-                  onClick={() => setOpen(false)}
+                  onClick={handleCloseModal}
                 >
                   Cancelar
                 </Button>
@@ -372,9 +506,9 @@ function ErrorContainer({ errors }) {
           : "none"
       }
     >
-      {errors.password && (
+      {errors.nombre && (
         <Text fontSize={"0.8rem"} color={"red"}>
-          {"* " + errors.password.message}
+          {"* " + errors.nombre.message}
         </Text>
       )}
       {errors.email && (
@@ -382,9 +516,9 @@ function ErrorContainer({ errors }) {
           {"* " + errors.email.message}
         </Text>
       )}
-      {errors.nombre && (
+      {errors.password && (
         <Text fontSize={"0.8rem"} color={"red"}>
-          {"* " + errors.nombre.message}
+          {"* " + errors.password.message}
         </Text>
       )}
     </VStack>

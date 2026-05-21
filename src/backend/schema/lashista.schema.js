@@ -11,36 +11,22 @@ export const lashistaSchema = z.object({
       6,
       "La contraseña debe tener al menos 6 caracteres"
     ),
-  horarioLV_entrada: z
+  horarioLV_entrada: z.string().min(5),
+  horarioLV_salida: z.string().min(5),
+  horarioLV_extra_entrada: z
     .string()
-    .min(5, "Seleccione un horario"),
-  horarioLV_salida: z
+    .min(5)
+    .optional()
+    .refine((val) => {
+      return val === undefined || val !== "";
+    }),
+  horarioLV_extra_salida: z
     .string()
-    .min(5, "Seleccione un horario"),
-  // horarioLV_extra_entrada: z
-  //   .string()
-  //   .min(5, "Seleccione un horario")
-  //   .nullable(),
-  // horarioLV_extra_salida: z
-  //   .string()
-  //   .min(5, "Seleccione un horario")
-  //   .nullable(),
-  horarioSBD_entrada: z
-    .string()
-    .min(5, "Seleccione un horario"),
-  horarioSBD_salida: z
-    .string()
-    .min(5, "Seleccione un horario"),
-  // horarioLV: z.object({
-  //   entrada: z.string().min(5, "Seleccione un horario"),
-  //   salida: z.string().min(5, "Seleccione un horario"),
-  // }),
-  // horarioLV_extra: z.object({
-  //   entrada: z.string().min(5, "Seleccione un horario"),
-  //   salida: z.string().min(5, "Seleccione un horario"),
-  // }),
-  // horarioSBD: z.object({
-  //   entrada: z.string().min(5, "Seleccione un horario"),
-  //   salida: z.string().min(5, "Seleccione un horario"),
-  // }),
+    .min(5)
+    .optional()
+    .refine((val) => {
+      return val === undefined || val !== "";
+    }),
+  horarioSBD_entrada: z.string().min(5),
+  horarioSBD_salida: z.string().min(5),
 });

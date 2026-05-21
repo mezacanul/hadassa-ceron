@@ -11,7 +11,12 @@ export function SelectDefault({
   // setValue,
 }) {
   return (
-    <VStack alignItems={"start"} w={"100%"} gap={"0.4rem"}>
+    <VStack
+      alignItems={"start"}
+      w={"100%"}
+      gap={"0.4rem"}
+      opacity={disabled ? 0.7 : 1}
+    >
       <Text
         w={"100%"}
         fontWeight={600}
