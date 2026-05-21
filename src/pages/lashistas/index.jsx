@@ -45,7 +45,11 @@ export default function Lashistas() {
           Agregar Lashista
         </Button>
 
-        <ModalNuevaLashista open={open} setOpen={setOpen} />
+        <ModalNuevaLashista
+          open={open}
+          setOpen={setOpen}
+          setLashistas={setLashistas}
+        />
 
         {lashistas && (
           <LashistasTable lashistas={lashistas} />

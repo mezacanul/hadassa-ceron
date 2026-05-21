@@ -36,6 +36,7 @@ const defaultLashistaForm = {
 export default function ModalNuevaLashista({
   open,
   setOpen,
+  setLashistas,
 }) {
   const {
     register,
@@ -150,7 +151,8 @@ export default function ModalNuevaLashista({
       const response =
         await LashistasService.createLashista(payload);
       console.log("response", response);
-      return response;
+      setLashistas((prev) => [...prev, response]);
+      return true;
     } catch (error) {
       console.log("error", error);
       throw error;
