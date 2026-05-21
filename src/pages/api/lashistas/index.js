@@ -4,12 +4,17 @@ import LashistasService from "@/backend/services/lashistas";
 export default async function handler(req, res) {
   try {
     if (req.method === "GET") {
-      // Query the lashistas table
-      const [rows] = await pool.query(
-        "SELECT * FROM lashistas WHERE isDeleted != 1 ORDER BY nombre ASC"
+      let active;
+      let inactive = [];
+      if (req.query.fetchAll === "true") {
+        [inactive] = await pool.query(
+          `SELECT * FROM lashistas WHERE isDeleted = 1 ORDER BY nombre ASC`
+        );
+      }
+      [active] = await pool.query(
+        `SELECT * FROM lashistas WHERE isDeleted != 1 ORDER BY nombre ASC`
       );
-      // Send the results as an array
-      res.status(200).json(rows);
+      res.status(200).json([...active, ...inactive]);
     } else if (req.method === "POST") {
       const result = await LashistasService.createLashista(
         req.body

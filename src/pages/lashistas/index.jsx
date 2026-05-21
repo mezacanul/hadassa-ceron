@@ -4,6 +4,7 @@ import {
   formatHorario,
 } from "@/utils/main";
 import {
+  Badge,
   Box,
   Button,
   Heading,
@@ -26,11 +27,13 @@ export default function Lashistas() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    axios.get("/api/lashistas").then((lashistasResp) => {
-      //   console.log(lashistasResp.data);
-      setLashistas(lashistasResp.data);
-      setLoading(false);
-    });
+    axios
+      .get("/api/lashistas?fetchAll=true")
+      .then((lashistasResp) => {
+        //   console.log(lashistasResp.data);
+        setLashistas(lashistasResp.data);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -127,7 +130,18 @@ function LashistaRow({ lashista }) {
         </VStack>
       </Table.Cell>
       <Table.Cell>
-        <Heading size={"md"}>{lashista.nombre}</Heading>
+        <VStack alignItems={"start"}>
+          <Heading size={"md"}>{lashista.nombre}</Heading>
+          <Badge
+            colorPalette={
+              lashista.isDeleted ? "gray" : "green"
+            }
+          >
+            {lashista.isDeleted
+              ? "Deshabilitada"
+              : "Habilitada"}
+          </Badge>
+        </VStack>
       </Table.Cell>
       <Table.Cell>
         {horariosLV.map((hr) => {

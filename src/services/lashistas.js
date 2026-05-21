@@ -5,7 +5,21 @@ async function createLashista(data) {
   return response.data;
 }
 
+async function toggleLashistaStatus(id, isDeleted) {
+  const response = await axios.patch(
+    `/api/lashistas/${id}`,
+    {
+      type: "toggleStatus",
+      payload: {
+        isDeleted,
+      },
+    }
+  );
+  return response.data;
+}
+
 const LashistasService = {
   createLashista,
+  toggleLashistaStatus,
 };
 export default LashistasService;

@@ -25,7 +25,12 @@ async function createLashista(data) {
     const lashistaID = lastInserted.id;
 
     // Crear prefijo para nombre de camas
-    const camaPrefix = `cama-${nombre.toLowerCase()}-`;
+    const nombres = nombre
+      .trim()
+      .split(" ")
+      .map((n) => n.toLowerCase())
+      .join("-");
+    const camaPrefix = `cama-${nombres}-`;
 
     const records = [
       [`${camaPrefix}1`, lashistaID],
