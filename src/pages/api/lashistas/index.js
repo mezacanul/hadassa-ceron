@@ -1,4 +1,5 @@
 import pool from "@/backend/models/db";
+
 export default async function handler(req, res) {
   try {
     if (req.method === "GET") {
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
         horarioSBD,
       } = req.body;
       const [result] = await pool.query(
-        "INSERT INTO lashistas (nombre, email, password, horarioLV, horarioSBD) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO lashistas (id, rol, image, nombre, email, password, horarioLV, horarioSBD) VALUES (UUID(), 'lashista', 'default.jpg', ?, ?, ?, ?, ?)",
         [nombre, email, password, horarioLV, horarioSBD]
       );
       res.status(200).json(result);

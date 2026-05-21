@@ -7,6 +7,7 @@ import {
   Text,
   VStack,
   HStack,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import ConfigurationService from "@/services/configuration";
@@ -18,6 +19,7 @@ import { SelectDefault } from "../common/SelectDefault";
 import { lashistaSchema } from "@/backend/schema/lashista.schema";
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import LashistasService from "@/services/lashistas";
 
 const defaultLashistaForm = {
   nombre: "",
@@ -41,7 +43,7 @@ export default function ModalNuevaLashista({
     reset,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     control,
   } = useForm({
     resolver: zodResolver(lashistaSchema),
@@ -108,52 +110,51 @@ export default function ModalNuevaLashista({
     );
   }, []);
 
-  const handleSave = (data) => {
+  const handleSave = async (data) => {
     console.log(data);
-    const {
-      horarioLV_entrada,
-      horarioLV_salida,
-      horarioLV_extra_entrada,
-      horarioLV_extra_salida,
-      horarioSBD_entrada,
-      horarioSBD_salida,
-    } = data;
+    try {
+      const {
+        horarioLV_entrada,
+        horarioLV_salida,
+        horarioLV_extra_entrada,
+        horarioLV_extra_salida,
+        horarioSBD_entrada,
+        horarioSBD_salida,
+      } = data;
 
-    const horarioLV = [
-      `${horarioLV_entrada} - ${horarioLV_salida}`,
-    ];
-    if (horarioLV_extra_entrada && horarioLV_extra_salida) {
-      horarioLV.push(
-        `${horarioLV_extra_entrada} - ${horarioLV_extra_salida}`
-      );
+      const horarioLV = [
+        `${horarioLV_entrada} - ${horarioLV_salida}`,
+      ];
+      if (
+        horarioLV_extra_entrada &&
+        horarioLV_extra_salida
+      ) {
+        horarioLV.push(
+          `${horarioLV_extra_entrada} - ${horarioLV_extra_salida}`
+        );
+      }
+      const horarioSBD = `${horarioSBD_entrada} - ${horarioSBD_salida}`;
+
+      let payload = {
+        nombre: data.nombre,
+        email: data.email,
+        password: data.password,
+        horarioLV: JSON.stringify(horarioLV),
+        horarioSBD,
+      };
+      // return new Promise((resolve) => {
+      //   setTimeout(() => {
+      //     resolve(payload);
+      //   }, 1000);
+      // });
+      const response =
+        await LashistasService.createLashista(payload);
+      console.log("response", response);
+      return response;
+    } catch (error) {
+      console.log("error", error);
+      throw error;
     }
-    const horarioSBD = `${horarioSBD_entrada} - ${horarioSBD_salida}`;
-
-    let payload = {
-      nombre: data.nombre,
-      email: data.email,
-      password: data.password,
-      horarioLV: JSON.stringify(horarioLV),
-      horarioSBD,
-    };
-    console.log("payload", payload);
-    // console.log(lashistaForm);
-    // const { inicio: inicioLV, cierre: cierreLV } =
-    //   lashistaForm.horarioLV;
-    // const { inicio: inicioSBD, cierre: cierreSBD } =
-    //   lashistaForm.horarioSBD;
-    // const formattedHorarioLV = [
-    //   `${inicioLV} - ${cierreLV}`,
-    // ];
-    // if (extraHorarioLV) {
-    //   const { entrada, salida } = extraHorarioLV;
-    //   formattedHorarioLV.push(`${entrada} - ${salida}`);
-    // }
-    // const formattedHorarioSBD = [
-    //   `${inicioSBD} - ${cierreSBD}`,
-    // ];
-    // console.log("formattedHorarioLV", formattedHorarioLV);
-    // console.log("formattedHorarioSBD", formattedHorarioSBD);
   };
 
   const handleAddHorarioExtraLV = () => {
@@ -437,20 +438,41 @@ export default function ModalNuevaLashista({
                   "0px -2px 4px rgba(132, 132, 132, 0.1)"
                 }
               >
-                <Button
-                  bg={"gray"}
-                  _hover={{ bg: "gray.600" }}
-                  onClick={handleCloseModal}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  type="submit"
-                  _hover={{ bg: "blue.700" }}
-                  bg={"blue.600"}
-                >
-                  Guardar
-                </Button>
+                {isSubmitting && (
+                  <Spinner
+                    size={"lg"}
+                    color={"blue.600"}
+                    borderWidth={"3px"}
+                    me={"0.3rem"}
+                  />
+                )}
+                {isSubmitSuccessful && (
+                  <Text
+                    color={"green"}
+                    py={"0.5rem"}
+                    fontSize={"1rem"}
+                  >
+                    {"¡Lashista Agregada Exitosamente!"}
+                  </Text>
+                )}
+                {!isSubmitting && !isSubmitSuccessful && (
+                  <>
+                    <Button
+                      bg={"gray"}
+                      _hover={{ bg: "gray.600" }}
+                      onClick={handleCloseModal}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      type="submit"
+                      _hover={{ bg: "blue.700" }}
+                      bg={"blue.600"}
+                    >
+                      Guardar
+                    </Button>
+                  </>
+                )}
               </Dialog.Footer>
             </Form>
           </Dialog.Content>
