@@ -1,55 +1,50 @@
-import { Portal, Select } from "@chakra-ui/react";
+import { Text, VStack } from "@chakra-ui/react";
 
-export function SelectDefault({ value, setValue }) {
-    // const [mp, setMp] = useMetodoPago();
-
-    useEffect(() => {
-    }, []);
-
-    const opciones = createListCollection({
-        items: [
-            { label: "Test 1", value: "test-1" },
-            { label: "Test 2", value: "test-2" },
-        ],
-    });
-
-    return (
-        <Select.Root
-            // disabled={citaID ? true : false}
-            bg={"white"}
-            mb={"0.5rem"}
-            collection={opciones}
-            size="md"
-            // width={w}
-            value={value}
-            onValueChange={(e) => {
-                setValue(e.value);
-            }}
-        >
-            <Select.HiddenSelect />
-            <Select.Control>
-                <Select.Trigger>
-                    <Select.ValueText placeholder="Metodo de Pago" />
-                </Select.Trigger>
-                <Select.IndicatorGroup>
-                    <Select.Indicator />
-                </Select.IndicatorGroup>
-            </Select.Control>
-            <Portal>
-                <Select.Positioner>
-                    <Select.Content>
-                        {opciones.items.map((opcion, idx) => (
-                            <Select.Item
-                                item={opcion}
-                                key={opcion.value}
-                            >
-                                {opcion.label}
-                                <Select.ItemIndicator />
-                            </Select.Item>
-                        ))}
-                    </Select.Content>
-                </Select.Positioner>
-            </Portal>
-        </Select.Root>
-    );
+export function SelectDefault({
+  label,
+  placeholder = "Select",
+  disabled = false,
+  options = [],
+  spreadProps,
+  error,
+  // value,
+  // setValue,
+}) {
+  return (
+    <VStack
+      alignItems={"start"}
+      w={"100%"}
+      gap={"0.4rem"}
+      opacity={disabled ? 0.7 : 1}
+    >
+      <Text
+        w={"100%"}
+        fontWeight={600}
+        fontSize={"0.8rem"}
+        color={error ? "red" : "black"}
+      >
+        {label}
+      </Text>
+      <select
+        style={{
+          width: "100%",
+          border: "0.1rem solid #e4e4e7",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          borderRadius: "0.3rem",
+          paddingTop: "0.8rem",
+          paddingBottom: "0.8rem",
+          borderColor: error ? "red" : "#e4e4e7",
+        }}
+        disabled={disabled}
+        {...spreadProps}
+      >
+        <option value="">{placeholder}</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </VStack>
+  );
 }

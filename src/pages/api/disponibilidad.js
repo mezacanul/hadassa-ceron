@@ -1,7 +1,7 @@
 import disponibilidadController from "@/backend/controllers/disponibilidad";
 
 export default async function handler(req, res) {
-    // console.log("TEST", req.body);
+    console.log("TEST", req.body);
     const response =
         await disponibilidadController.getHorariosDisponibles(
             req.body
