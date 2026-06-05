@@ -8,7 +8,7 @@ function getDayName(fecha) {
 
 function generarHorarioDelDia({ weekend = false }) {
   const startHour = weekend ? 9 : 9.5;
-  const endHour = weekend ? 14.5 : 17.5; // 14:30 or 17:30
+  const endHour = weekend ? 14.5 : 18; // 14:30 or 17:30
   const workDayHours = [];
 
   for (let time = startHour; time <= endHour; time += 0.5) {
