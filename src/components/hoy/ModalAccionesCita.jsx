@@ -160,14 +160,21 @@ export default function ModalAccionesCita({
             </Dialog.Header>
 
             {cita && (
-              <Dialog.Body>
+              <Dialog.Body px={"2rem"}>
+                <HStack w={"100%"} justifyContent={"space-between"}>
+                  <StatusBadge status={cita.status} pagado={cita.pagado} />
+                  {/* Fecha  */}
+                  <Text>{formatHoyTitle(formatFechaYMD(cita.fecha))}</Text>
+                </HStack>
+
                 <Grid
                   w={"100%"}
                   gridTemplateColumns={{ base: "1fr", lg: "2fr 3fr" }}
                   gap={"2rem"}
                   mb={"1rem"}
-                  px={"1rem"}
-                  py={"2rem"}
+                  // px={"1rem"}
+                  pt={"1rem"}
+                  pb={"2rem"}
                   minH={"17rem"}
                 >
                   <DetallesCita cita={cita} />
@@ -235,8 +242,40 @@ export default function ModalAccionesCita({
 
 function DetallesCita({ cita }) {
   return (
-    <VStack alignItems={"start"} justifyContent={"space-between"}>
+    <VStack alignItems={"start"} gap={"1rem"}>
+      <VStack
+        alignItems={"start"}
+        gap={"0rem"}
+        py={"0.5rem"}
+        px={"0.8rem"}
+        rounded={"lg"}
+        // shadow={"sm"}
+        borderColor={"pink.500"}
+        borderWidth={"2px"}
+        w={"100%"}
+        bg={"white"}
+      >
+        <Text fontWeight={600} fontSize={"md"}>
+          {cita.servicio}
+        </Text>
+        <HStack>
+          <Text>{"con "}</Text>
+          <Text color={"pink.500"} fontWeight={600}>
+            {cita.lashista}
+          </Text>
+        </HStack>
+      </VStack>
+
       <VStack alignItems={"start"} gap={"0.5rem"} w={"100%"}>
+        <Text>Para:</Text>
+        {/* Nombre del cliente */}
+        <HStack>
+          <Text fontWeight={600} fontSize={"lg"}>
+            {cita.nombres} {cita.apellidos}
+          </Text>
+        </HStack>
+
+        {/* Hora */}
         <HStack
           // alignItems={"center"}
           alignItems={"end"}
@@ -254,47 +293,6 @@ function DetallesCita({ cita }) {
             {` - ${addMinutesToTime(cita.hora, cita.minutos)}`}
           </Text>
         </HStack>
-
-        <HStack>
-          {/* <Text
-                        fontWeight={600}
-                        fontSize={"lg"}
-                    >
-                        <IoPerson />
-                    </Text> */}
-          <Text fontWeight={600} fontSize={"lg"}>
-            {cita.nombres} {cita.apellidos}
-          </Text>
-        </HStack>
-
-        <Text>{formatHoyTitle(formatFechaYMD(cita.fecha))}</Text>
-
-        <StatusBadge status={cita.status} pagado={cita.pagado} />
-        {/* <Text>{`+${cita.lada} ${cita.telefono}`}</Text> */}
-      </VStack>
-
-      <VStack
-        alignItems={"start"}
-        gap={"0rem"}
-        py={"0.5rem"}
-        px={"1rem"}
-        rounded={"lg"}
-        // shadow={"sm"}
-        borderColor={"pink.500"}
-        borderWidth={"2px"}
-        w={"100%"}
-        bg={"white"}
-      >
-        <Text fontWeight={600} fontSize={"md"}>
-          {cita.servicio}
-        </Text>
-        <Text
-          color={"pink.500"}
-          fontWeight={600}
-          // fontSize={"md"}
-        >
-          {cita.lashista}
-        </Text>
       </VStack>
     </VStack>
   );

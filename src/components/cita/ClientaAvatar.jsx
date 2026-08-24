@@ -33,10 +33,10 @@ export default function ClientaAvatar({
               textDecor: "underline",
               cursor: "pointer",
             }}
-            onClick={() => {
-              NextNav.push(`/clientas/${clientaID}`);
-              setLoading(true);
-            }}
+            // onClick={() => {
+            //   NextNav.push(`/clientas/${clientaID}`);
+            //   setLoading(true);
+            // }}
             // borderWidth={"0 0 2px"}
             borderColor={"pink.700"}
             size={"2xl"}
