@@ -1,8 +1,11 @@
 import { CDN } from "@/config/cdn";
 import { loadHook } from "@/utils/lattice-design";
+import { Text } from "@chakra-ui/react";
 import { Badge, Heading, HStack, Image, VStack } from "@chakra-ui/react";
 import { useRouter as useNextNav } from "next/navigation";
 import { useEffect, useMemo } from "react";
+import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
+import { FaUser } from "react-icons/fa6";
 
 export default function ImagenesTicket({ cita }) {
   const [loading, setLoading] = loadHook("useLoader");
@@ -26,29 +29,24 @@ export default function ImagenesTicket({ cita }) {
   }, []);
 
   return (
-    <VStack w={"100%"} gap={"1rem"} align={"start"}>
-      <HStack
-        alignItems={"end"}
-        w={"100%"}
-        gap={"2rem"}
-        justifyContent={"space-between"}
+    <VStack w={"100%"} gap={"0.5rem"} align={"start"}>
+      <Heading
+        onClick={() => {
+          setLoading(true);
+          NextNav.push(`/servicios/${cita.servicio_id}`);
+        }}
+        _hover={{
+          textDecor: "underline",
+          cursor: "pointer",
+        }}
+        color={"pink.700"}
+        borderColor={"pink.700"}
+        size={"2xl"}
       >
-        <Heading
-          onClick={() => {
-            setLoading(true);
-            NextNav.push(`/servicios/${cita.servicio_id}`);
-          }}
-          _hover={{
-            textDecor: "underline",
-            cursor: "pointer",
-          }}
-          color={"pink.700"}
-          borderColor={"pink.700"}
-          size={"2xl"}
-        >
-          {cita.servicio}
-        </Heading>
-      </HStack>
+        {cita.servicio}
+      </Heading>
+
+      <Clienta nombre={`${cita.clienta_nombres} ${cita.clienta_apellidos}`} />
 
       <HStack justifyContent={"space-between"} w={"100%"}>
         <Lashista nombre={cita.lashista} foto={cita.lashista_foto} />
@@ -77,6 +75,17 @@ function Lashista({ foto, nombre }) {
         w={"2rem"}
         src={`${CDN}/img/lashistas/${foto}`}
       />
+      <Heading size={"lg"} fontWeight={700}>
+        {nombre}
+      </Heading>
+    </HStack>
+  );
+}
+
+function Clienta({ nombre }) {
+  return (
+    <HStack justifyContent={"start"} gap={"0.5rem"}>
+      <Text>Para:</Text>
       <Heading size={"lg"} fontWeight={700}>
         {nombre}
       </Heading>

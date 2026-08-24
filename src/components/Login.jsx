@@ -60,7 +60,7 @@ export default function Login() {
 
   return (
     <VStack
-      h={"100vh"}
+      h={"100dvh"}
       w={"100vw"}
       justify={"center"}
       align={"center"}
@@ -75,7 +75,7 @@ export default function Login() {
         <Image
           src={"/hadassa-logo.jpg"}
           alt="Logo"
-          w={"15rem"}
+          w={["10rem", "15rem"]}
           objectFit={"cover"}
         />
         <Input

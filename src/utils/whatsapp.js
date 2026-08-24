@@ -1,5 +1,10 @@
 import { formatSpanishDate, formatTimeToAMPM } from "./main";
 
+function createWhatsappLink(lada, telefono) {
+  const phone = `${lada}${telefono}`;
+  return `https://wa.me/${phone}`;
+}
+
 function createWhatsAppUrl(cita, tipo) {
   const phone = `${cita.lada}${cita.telefono}`;
   const message = createMessage(cita, tipo);
@@ -44,6 +49,7 @@ function createMessage(cita, tipo) {
 const whatsappUtils = {
   createWhatsAppUrl,
   createMessage,
+  createWhatsappLink,
 };
 
 export default whatsappUtils;
