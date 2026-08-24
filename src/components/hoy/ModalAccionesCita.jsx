@@ -316,27 +316,33 @@ function AccionesCita({
   );
 
   const enviarConfirmacion = () => {
-    whatsappUtils.copyMessage(
-      {
-        ...cita,
-        precio: servicio.precio,
-        precio_tarjeta: servicio.precio_tarjeta,
-      },
-      "confirmacion",
+    // whatsappUtils.copyMessage(
+    //   {
+    //     ...cita,
+    //     precio: servicio.precio,
+    //     precio_tarjeta: servicio.precio_tarjeta,
+    //   },
+    //   "confirmacion",
+    // );
+    window.open(
+      whatsappUtils.createWhatsAppUrl(cita, "confirmacion"),
+      "_blank",
     );
-    window.open(whatsappUtils.createWhatsAppUrl(cita), "_blank");
   };
 
   const enviarRecordatorio = () => {
-    whatsappUtils.copyMessage(
-      {
-        ...cita,
-        precio: servicio.precio,
-        precio_tarjeta: servicio.precio_tarjeta,
-      },
-      "recordatorio",
+    // whatsappUtils.copyMessage(
+    //   {
+    //     ...cita,
+    //     precio: servicio.precio,
+    //     precio_tarjeta: servicio.precio_tarjeta,
+    //   },
+    //   "recordatorio",
+    // );
+    window.open(
+      whatsappUtils.createWhatsAppUrl(cita, "recordatorio"),
+      "_blank",
     );
-    window.open(whatsappUtils.createWhatsAppUrl(cita), "_blank");
   };
   return (
     <Grid
