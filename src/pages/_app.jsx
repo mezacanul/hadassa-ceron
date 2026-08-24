@@ -77,7 +77,7 @@ export default function App({ Component, pageProps }) {
           position={"relative"}
         >
           <NavBar h={"11vh"} />
-          <VStack id="Body" px={"2rem"} py={"2.5rem"} minH={"90vh"}>
+          <VStack id="Body" px={["1.5rem", "2rem"]} py={"2.5rem"} minH={"90vh"}>
             <Component {...pageProps} />
           </VStack>
           <Sidebar />
