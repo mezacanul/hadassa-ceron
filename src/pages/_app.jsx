@@ -68,18 +68,30 @@ export default function App({ Component, pageProps }) {
         <Login />
       ) : (
         <Box
-          bg={"#f1f5ff"}
+          bg={"#f3faff"}
           h={loading ? "100vh" : "initial"}
-          overflow={
-            // loading ? "hidden" : "default"
-            "hidden"
-          }
+          overflow={"hidden"}
           position={"relative"}
         >
+          {/**
+           * @component Top Navigation Bar
+           * @description Barra de navegación superior de la aplicación
+           */}
           <NavBar h={"11vh"} />
+
+          {/**
+           * @component Body
+           * @description Contenedor principal de la aplicación
+           */}
           <VStack id="Body" px={["1.5rem", "2rem"]} py={"2.5rem"} minH={"90vh"}>
             <Component {...pageProps} />
           </VStack>
+
+          {/**
+           * @component Sidebar
+           * @default Closed
+           * @description Barra lateral de la aplicación, se abre y se cierra con el botón de la barra de navegación
+           */}
           <Sidebar />
         </Box>
       )}

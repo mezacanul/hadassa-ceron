@@ -14,6 +14,7 @@ import {
   GridItem,
   Heading,
   Portal,
+  Separator,
   Skeleton,
   VStack,
 } from "@chakra-ui/react";
@@ -63,6 +64,7 @@ function DetallesCita({ cita, setCita }) {
   return (
     <VStack gap={"1.5rem"}>
       <ImagenesTicket cita={cita} />
+      <Separator w={"40%"} h={"1px"} borderColor={"grey.500"} />
       <DetallesTicket cita={cita} />
       <AccionesTicket cita={cita} setCita={setCita} />
     </VStack>
@@ -71,7 +73,7 @@ function DetallesCita({ cita, setCita }) {
 
 function DetallesClientaEnCita({ cita }) {
   return (
-    <VStack gap={"2rem"} w={"100%"} align={"start"} >
+    <VStack gap={"2rem"} w={"100%"} align={"start"}>
       <ClientaAvatar
         clientaID={cita.clienta_id}
         foto={cita.foto_clienta}

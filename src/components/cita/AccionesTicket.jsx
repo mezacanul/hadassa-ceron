@@ -109,27 +109,46 @@ export default function AccionesTicket({ cita, setCita }) {
         <Spinner borderWidth={"3px"} size={"xl"} color={"pink.500"} />
       )}
 
+      {/**
+       * @component Botón de marcar como pagada
+       * @description Botón de marcar como pagada
+       * @note Only visible if the cita is not cancelled and not pagada
+       */}
+      {cita.pagado != 1 && cita.status != 0 && (
+        <VStack w={"100%"}>
+          {/* {(mp == null || mp.length == 0) && (
+            <Text fontSize={"xs"} color={"blue.600"}>
+              {"(Selecciona un método de pago)"}
+            </Text>
+          )} */}
+          <Button
+            onClick={marcarComoPagada}
+            {...buttonStyles}
+            colorPalette={"green"}
+            w={"100%"}
+            disabled={mp == null || mp.length == 0}
+          >
+            {"Marcar como Pagada"}
+          </Button>
+        </VStack>
+      )}
+
+      {/**
+       * @component Botones de WhatsApp
+       * @description Botones de WhatsApp para confirmar y recordar cita
+       * @note Only visible if the cita is not cancelled
+       */}
       {cita.status != 0 && (
         <HStack w={"100%"}>
           <Link
             style={{ width: "100%" }}
             href={whatsappUtils.createWhatsAppUrl(cita, "confirmacion")}
             target="_blank"
-            {...buttonStyles}
-            colorPalette={"green"}
           >
-            {/* <Button
-              onClick={() => {
-                whatsappUtils.copyMessage(cita, "confirmacion");
-              }}
-              // onClick={marcarComoPagada}
-              {...buttonStyles}
-              colorPalette={"green"}
-              w={"100%"}
-            > */}
-            {"Confirmación"}
-            <FaWhatsapp />
-            {/* </Button> */}
+            <Button {...buttonStyles} colorPalette={"green"} w={"100%"}>
+              {"Confirmación"}
+              <FaWhatsapp />
+            </Button>
           </Link>
 
           <Link
@@ -139,21 +158,19 @@ export default function AccionesTicket({ cita, setCita }) {
             {...buttonStyles}
             colorPalette={"green"}
           >
-            {/* <Button
-              onClick={() => {
-                whatsappUtils.copyMessage(cita, "recordatorio");
-              }}
-              {...buttonStyles}
-              colorPalette={"green"}
-              w={"100%"}
-            > */}
-            {"Recordatorio"}
-            <FaWhatsapp />
-            {/* </Button> */}
+            <Button {...buttonStyles} colorPalette={"green"} w={"100%"}>
+              {"Recordatorio"}
+              <FaWhatsapp />
+            </Button>
           </Link>
         </HStack>
       )}
 
+      {/**
+       * @component Botones de cancelar y confirmar cita
+       * @description Botones de cancelar y confirmar cita
+       * @note Only visible if the cita is not cancelled
+       */}
       {!loadingUpdate && (
         <>
           <Grid gap={"1rem"} gridTemplateColumns={"1fr 1fr"} w={"100%"}>
@@ -176,25 +193,6 @@ export default function AccionesTicket({ cita, setCita }) {
               </Button>
             )}
           </Grid>
-
-          {cita.pagado != 1 && cita.status != 0 && (
-            <VStack w={"100%"}>
-              <Button
-                onClick={marcarComoPagada}
-                {...buttonStyles}
-                colorPalette={"green"}
-                w={"100%"}
-                disabled={mp == null || mp.length == 0}
-              >
-                {"Marcar como Pagada"}
-              </Button>
-              {(mp == null || mp.length == 0) && (
-                <Text fontSize={"sm"} color={"blue.600"}>
-                  {"Selecciona un método de pago"}
-                </Text>
-              )}
-            </VStack>
-          )}
         </>
       )}
     </VStack>

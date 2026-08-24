@@ -83,6 +83,8 @@ export default function NavBar({ h }) {
         // justify={"space-between"}
       >
         {/**
+         * @component FechaLogo
+         * @description Logo de la aplicación con la fecha seleccionada
          * @note
          * On root we show the date as the logo
          */}
@@ -90,16 +92,20 @@ export default function NavBar({ h }) {
         {router.pathname == "/" && <FechaLogo selectedDate={selectedDate} />}
 
         {/**
+         * @component Heading
+         * @description Título de la página
          * @note
          * On other pages we show the pathname as the heading
          */}
         {router.pathname != "/" && (
-          <Heading fontWeight={300} size={"4xl"} fontStyle={"italic"}>
+          <Heading fontWeight={300} size={["3xl", "4xl"]} fontStyle={"italic"}>
             {PathnameToHeading[router.pathname]}
           </Heading>
         )}
 
         {/**
+         * @component Box
+         * @description Contenedor del botón de agendar cita
          * @note
          * Agendar button only visible on root page
          */}
@@ -110,6 +116,12 @@ export default function NavBar({ h }) {
         )}
       </HStack>
 
+      {/**
+       * @component HStack
+       * @description Contenedor de los enlaces de navegación
+       * @display {none} on base screen
+       * @display {flex} on lg screen
+       */}
       <HStack
         display={{ base: "none", lg: "flex" }}
         w={"100%"}
@@ -126,13 +138,21 @@ export default function NavBar({ h }) {
         ))}
       </HStack>
 
+      {/**
+       * @component Boton del menu lateral
+       * @description Boton para abrir y cerrar el menu lateral
+       * @display {flex} on base screen
+       * @display {none} on lg screen
+       */}
       <HStack
         w={"100%"}
         justify={"flex-end"}
         align={"center"}
         display={{ base: "flex", lg: "none" }}
       >
-        <BotonAgendar onClick={goToAgendar} />
+        <Box display={{ base: "none", md: "block" }}>
+          <BotonAgendar onClick={goToAgendar} />
+        </Box>
         <RxHamburgerMenu
           onClick={() => {
             setSidebarOpen(true);
