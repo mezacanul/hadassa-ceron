@@ -1,12 +1,9 @@
-import {
-    parseQueryFilters,
-    queryPlusFilters,
-} from "@/utils/main";
+import { parseQueryFilters, queryPlusFilters } from "@/utils/main";
 // import connection from "../models/db";
 import pool from "../models/db";
 
 async function getByID(id) {
-    const query = `SELECT 
+  const query = `SELECT 
             citas.id as cita_ID,
             servicios.image servicio_foto,
             lashistas.id as lashista_id, 
@@ -22,6 +19,7 @@ async function getByID(id) {
             citas.monto_pagado,
             citas.pagado,
             servicios.precio,
+            servicios.precio_tarjeta,
             servicios.minutos,
             servicios.id as servicio_id,
             servicios.precio_tarjeta,
@@ -39,12 +37,12 @@ async function getByID(id) {
         LEFT JOIN servicios ON citas.servicio_id = servicios.id
         WHERE citas.id = ?
     `;
-    const [rows] = await pool.query(query, [id]);
-    return rows;
+  const [rows] = await pool.query(query, [id]);
+  return rows;
 }
 
 async function getByClientaID(clientaId) {
-    const query = `
+  const query = `
         SELECT 
             citas.id,
             lashistas.nombre as lashista,
@@ -61,18 +59,18 @@ async function getByClientaID(clientaId) {
             citas.fecha DESC,
             citas.hora DESC
     `;
-    const [rows] = await pool.query(query, [clientaId]);
-    return rows;
+  const [rows] = await pool.query(query, [clientaId]);
+  return rows;
 }
 
 async function getByMultipleFilters(reqQuery) {
-    const filterMap = {
-        date: "fecha",
-        lashista: "lashista_id",
-        // cama: "cama_id",
-        // hora: "hora"
-    };
-    let sqlQuery = `
+  const filterMap = {
+    date: "fecha",
+    lashista: "lashista_id",
+    // cama: "cama_id",
+    // hora: "hora"
+  };
+  let sqlQuery = `
         SELECT 
             citas.id as cita_ID, 
             fecha, 
@@ -86,6 +84,7 @@ async function getByMultipleFilters(reqQuery) {
             servicios.id as servicio_id, 
             servicios.servicio, 
             servicios.precio, 
+            servicios.precio_tarjeta,
             servicios.minutos as minutos, 
             lashistas.nombre as lashista,
             pagado,
@@ -102,22 +101,19 @@ async function getByMultipleFilters(reqQuery) {
         LEFT JOIN lashistas ON citas.lashista_id = lashistas.id
     `;
 
-    const { conditions, params } = parseQueryFilters(
-        reqQuery,
-        filterMap
-    );
+  const { conditions, params } = parseQueryFilters(reqQuery, filterMap);
 
-    let fullQuery = queryPlusFilters(sqlQuery, conditions);
-    fullQuery = `${fullQuery} ORDER BY STR_TO_DATE(fecha, '%d-%m-%Y') DESC, lashista DESC, hora DESC`;
+  let fullQuery = queryPlusFilters(sqlQuery, conditions);
+  fullQuery = `${fullQuery} ORDER BY STR_TO_DATE(fecha, '%d-%m-%Y') DESC, lashista DESC, hora DESC`;
 
-    const [rows] = await pool.query(fullQuery, params);
-    console.log("repository", rows);
-    return rows;
+  const [rows] = await pool.query(fullQuery, params);
+  console.log("repository", rows);
+  return rows;
 }
 
 async function createCita(cita, uuid, hora) {
-    try {
-        const query = `
+  try {
+    const query = `
         INSERT INTO 
             citas 
                 (id, 
@@ -132,29 +128,26 @@ async function createCita(cita, uuid, hora) {
                 added
             ) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-        const [mysql_response] = await pool.query(query, [
-            uuid,
-            cita.clienta.id,
-            cita.servicio.id,
-            cita.lashista.id,
-            cita.fecha,
-            hora,
-            cita.servicio.minutos,
-            cita.horario.cama,
-            // cita.metodoPago,
-            1,
-        ]);
-        return mysql_response;
-    } catch (error) {
-        throw new Error(
-            "MySQL insertion failed:",
-            error.message
-        );
-    }
+    const [mysql_response] = await pool.query(query, [
+      uuid,
+      cita.clienta.id,
+      cita.servicio.id,
+      cita.lashista.id,
+      cita.fecha,
+      hora,
+      cita.servicio.minutos,
+      cita.horario.cama,
+      // cita.metodoPago,
+      1,
+    ]);
+    return mysql_response;
+  } catch (error) {
+    throw new Error("MySQL insertion failed:", error.message);
+  }
 }
 
 async function getCitasDelDiaByLashista(fecha, lashista) {
-    const query = `
+  const query = `
         SELECT 
             servicio_id, 
             servicios.servicio, 
@@ -172,19 +165,16 @@ async function getCitasDelDiaByLashista(fecha, lashista) {
         AND citas.lashista_id = ? 
         AND citas.status != 0
     `;
-    const [rows] = await pool.query(query, [
-        fecha,
-        lashista,
-    ]);
-    return rows;
+  const [rows] = await pool.query(query, [fecha, lashista]);
+  return rows;
 }
 
 const citasRepository = {
-    getByClientaID,
-    getByID,
-    getByMultipleFilters,
-    createCita,
-    getCitasDelDiaByLashista,
+  getByClientaID,
+  getByID,
+  getByMultipleFilters,
+  createCita,
+  getCitasDelDiaByLashista,
 };
 
 export default citasRepository;

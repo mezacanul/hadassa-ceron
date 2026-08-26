@@ -1,146 +1,94 @@
 import { CDN } from "@/config/cdn";
-import { useCita } from "@/pages/citas/[citaID]";
 import { loadHook } from "@/utils/lattice-design";
-import { formatCamaID } from "@/utils/main";
-import { Button, Dialog, Heading, HStack, Image, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
+import { Badge, Heading, HStack, Image, VStack } from "@chakra-ui/react";
 import { useRouter as useNextNav } from "next/navigation";
-import { useEffect, useState } from "react";
-import SelectCama from "./SelectCama";
-import axios from "axios";
-import DialogConfirmar from "./DialogConfirmar";
+import { useEffect, useMemo } from "react";
+import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
+import { FaUser } from "react-icons/fa6";
 
 export default function ImagenesTicket({ cita }) {
-    const [loading, setLoading] = loadHook("useLoader")
-    const NextNav = useNextNav();
-    // const [cita] = useCita();
+  const [loading, setLoading] = loadHook("useLoader");
+  const NextNav = useNextNav();
+  // const [cita] = useCita();
+  const statusBadgeColor = useMemo(() => {
+    switch (cita.status) {
+      case 1:
+        return "yellow";
+      case 2:
+        return "green";
+      case 0:
+        return "red";
+      default:
+        return "gray";
+    }
+  }, [cita.status]);
 
-    useEffect(() => {
-        console.log(cita);
-    }, [])
+  useEffect(() => {
+    console.log(cita);
+  }, []);
 
-    return (
-        <VStack w={"100%"} gap={"2rem"} align={"start"}>
-            <HStack alignItems={"start"} w={"100%"} gap={"2rem"} justifyContent={"space-between"}>
-                {/* <VStack alignItems={"start"} gap={"2rem"} w={"100%"}> */}
-                <Image
-                    shadow={"sm"}
-                    rounded={"md"}
-                    w={"10rem"}
-                    src={`${CDN}/img/servicios/${cita.servicio_foto}`}
-                />
-                {/* </VStack> */}
-                <Lashista
-                    lashistaID={cita.lashista_id}
-                    nombre={cita.lashista}
-                    foto={cita.lashista_foto}
-                    camaID={cita.cama_id}
-                    citaID={cita.cita_ID}
-                />
-            </HStack>
-            <Heading
-                onClick={() => {
-                    setLoading(true)
-                    NextNav.push(`/servicios/${cita.servicio_id}`)
-                }}
-                _hover={{
-                    textDecor: "underline",
-                    cursor: "pointer"
-                }}
-                color={"pink.700"}
-                // borderWidth={"0 0 2px"}
-                borderColor={"pink.700"}
-                size={"2xl"}
-            >
-                {cita.servicio}
-            </Heading>
-        </VStack>
-    );
+  return (
+    <VStack w={"100%"} gap={"0.5rem"} align={"start"}>
+      <Heading
+        onClick={() => {
+          setLoading(true);
+          NextNav.push(`/servicios/${cita.servicio_id}`);
+        }}
+        _hover={{
+          textDecor: "underline",
+          cursor: "pointer",
+        }}
+        color={"pink.700"}
+        borderColor={"pink.700"}
+        size={"2xl"}
+      >
+        {cita.servicio}
+      </Heading>
+
+      <Clienta nombre={`${cita.clienta_nombres} ${cita.clienta_apellidos}`} />
+
+      <HStack justifyContent={"space-between"} w={"100%"}>
+        <Lashista nombre={cita.lashista} foto={cita.lashista_foto} />
+        <Badge
+          shadow={"sm"}
+          p={"0.5rem"}
+          fontWeight={800}
+          fontSize={"0.9rem"}
+          colorPalette={statusBadgeColor}
+        >
+          {cita.status == 2 && "Confirmada"}
+          {cita.status == 1 && "Pendiente"}
+          {cita.status == 0 && "Cancelada"}
+        </Badge>
+      </HStack>
+    </VStack>
+  );
 }
 
-function Lashista({ lashistaID, foto, nombre, camaID, citaID }) {
-    const [enabled, setEnabled] = useState(false)
-    const [cama, setCama] = useState([])
-    const [status, setStatus] = useState("iddle")
-    const [open, setOpen] = useState(false)
+function Lashista({ foto, nombre }) {
+  return (
+    <HStack justifyContent={"start"} gap={"0.5rem"}>
+      <Image
+        shadow={"sm"}
+        rounded={"full"}
+        w={"2rem"}
+        src={`${CDN}/img/lashistas/${foto}`}
+      />
+      <Heading size={"lg"} fontWeight={700}>
+        {nombre}
+      </Heading>
+    </HStack>
+  );
+}
 
-    function actualizarCama() {
-        // setOpen(true)
-        // return
-        console.log(citaID, cama[0]);
-        const send = {
-            column: "cama_id",
-            value: cama[0]
-        }
-        setStatus("updating")
-
-        axios.patch((`/api/citas/${citaID}`), send)
-            .then((axiosResp) => {
-                console.log(axiosResp);
-                const resp = axiosResp.data
-                if (resp.success && resp.affectedRows == 1) {
-                    setEnabled(false)
-                    setStatus("success")
-                } else {
-                    // setEnabled(true)
-                    setStatus("error")
-                }
-            })
-    }
-
-    return (
-        <VStack h={"100%"} justifyContent={"start"} w={"100%"} alignItems={"end"} gap={"0.5rem"}>
-            <Image
-                shadow={"sm"}
-                rounded={"full"}
-                w={"3rem"}
-                src={`${CDN}/img/lashistas/${foto}`}
-            />
-            <VStack w={"80%"} align={"end"} ms={"1rem"}>
-                <Heading
-                    size={"lg"}
-                    fontWeight={700}
-                >
-                    {nombre}
-                </Heading>
-                <SelectCama
-                    lashistaID={lashistaID}
-                    camaID={camaID}
-                    setEnabled={setEnabled}
-                    cama={cama}
-                    setCama={setCama}
-                    status={status}
-                    setStatus={setStatus}
-                />
-                {status != "updating" && (
-                    <Button
-                        disabled={!enabled}
-                        bg={"pink.500"}
-                        w={"100%"}
-                        size={"sm"}
-                        onClick={() => { setOpen(true) }}
-                    >
-                        Actualizar
-                    </Button>
-                )}
-            </VStack>
-            {status == "updating" && <Spinner size={"md"} color={"pink.500"} />}
-            {status == "success" && <Text color={"green"}>¡Actualizado!</Text>}
-            {status == "error" && <Text color={"red"}>Error</Text>}
-
-            <DialogConfirmar
-                open={open}
-                setOpen={setOpen}
-                title={"Cambiar Cama"}
-                onConfirm={() => {
-                    setOpen(false)
-                    actualizarCama()
-                }}
-            >
-                <Heading textDecor={"underline"} size={"md"}>{nombre}</Heading>
-                {cama[0] && <Text>Nueva Cama:</Text>}
-
-                {cama[0] && <Heading my={"1.5rem"} size={"2xl"} textAlign={"center"}>{formatCamaID(cama[0])}</Heading>}
-            </DialogConfirmar>
-        </VStack>
-    );
+function Clienta({ nombre }) {
+  return (
+    <HStack justifyContent={"start"} gap={"0.5rem"}>
+      <Text>Para:</Text>
+      <Heading size={"lg"} fontWeight={700}>
+        {nombre}
+      </Heading>
+    </HStack>
+  );
 }
