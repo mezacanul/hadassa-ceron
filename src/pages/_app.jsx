@@ -68,6 +68,7 @@ export default function App({ Component, pageProps }) {
         <Login />
       ) : (
         <Box
+          id="App"
           bg={"#f3faff"}
           h={loading ? "100vh" : "initial"}
           overflow={"hidden"}
@@ -103,10 +104,11 @@ export default function App({ Component, pageProps }) {
 function Loader({ loading }) {
   return (
     <Box
+      id="Loader"
       display={loading ? "block" : "none"}
       position={"absolute"}
-      w={"100vw"}
-      h={"100vh"}
+      w={"100%"}
+      h={"100%"}
       bg={"white"}
       zIndex={100}
       top={0}

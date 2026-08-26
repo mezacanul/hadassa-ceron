@@ -31,11 +31,12 @@ export default function Index() {
       w={"100%"}
     >
       <Hoy />
+
       <Stack
         w={"100%"}
         align={"start"}
         gap={"1.5rem"}
-        direction={{ base: "column-reverse", md: "row-reverse", lg: "column" }}
+        direction={{ base: "column-reverse", lg: "column" }}
       >
         <Box w={"100%"} display={{ base: "none", lg: "block" }}>
           <CamasLive />
