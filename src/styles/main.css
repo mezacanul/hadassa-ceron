@@ -1,7 +1,8 @@
-@media (min-width: 1080px) and (max-width: 1200px) {
+@media (min-width: 1000px) and (max-width: 1200px) {
   #App {
     zoom: 0.8 !important;
   }
+  #Login,
   #Loader {
     zoom: 1 !important;
   }

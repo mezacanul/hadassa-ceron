@@ -60,10 +60,12 @@ export default function Login() {
 
   return (
     <VStack
+      id="Login"
       h={"100dvh"}
       w={"100vw"}
       justify={"center"}
       align={"center"}
+      bg={"white"}
       // bg={"#f1f5ff"}
     >
       <VStack
