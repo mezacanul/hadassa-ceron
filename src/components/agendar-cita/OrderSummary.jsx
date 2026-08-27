@@ -85,15 +85,12 @@ export default function OrderSummary({
                 clienta: currentCita.clienta.id,
                 servicio: currentCita.servicio.id,
             };
-            console.log(send);
-            axios
+                        axios
                 .post("/api/descuentos", send)
                 .then((axiosResp) => {
-                    console.log(axiosResp);
-                    const total = axiosResp.data.length;
+                                        const total = axiosResp.data.length;
                     const newTotal = total + 1;
-                    // console.log(newTotal % 6 === 0);
-
+                    
                     setTieneDescuento({
                         aplica:
                             newTotal % 6 === 0
@@ -110,12 +107,7 @@ export default function OrderSummary({
 
     const handleAgendar = () => {
         setAgendarLoading(true);
-        console.log({
-            ...currentCita,
-            // metodoPago: mp[0],
-            action: "agendar",
-        });
-        // return
+                // return
 
         axios
             .post("/api/citas", {
@@ -124,8 +116,7 @@ export default function OrderSummary({
                 action: "agendar",
             })
             .then((citasResp) => {
-                console.log(citasResp);
-                if (
+                                if (
                     citasResp.status == 201 &&
                     citasResp.data.uuid
                 ) {
@@ -135,8 +126,7 @@ export default function OrderSummary({
             })
             .catch((error) => {
                 setAgendarLoading(null);
-                console.log(error);
-            });
+                            });
     };
 
     const handleCurrentStage = (stage) => {
@@ -180,8 +170,7 @@ export default function OrderSummary({
                 break;
         }
         setCurrentPaso(stage);
-        console.log(stage);
-    };
+            };
 
     return (
         <VStack

@@ -170,8 +170,7 @@ export default async function handler(req, res) {
 }
 
 function getDateSQLParams(dateInfo) {
-    console.log(dateInfo);
-    const [thisWeekStartDay, thisWeekStartMonth, thisWeekStartYear] =
+        const [thisWeekStartDay, thisWeekStartMonth, thisWeekStartYear] =
         dateInfo.thisWeek.startDate.split("/");
     const [thisWeekEndDay, thisWeekEndMonth, thisWeekEndYear] =
         dateInfo.thisWeek.endDate.split("/");

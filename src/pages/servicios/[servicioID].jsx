@@ -18,8 +18,7 @@ export default function Servicio() {
             axios
                 .get(`/api/servicios/${servicioID}`)
                 .then((servResp)=>{
-                    console.log(servResp.data);
-                    setServicio(servResp.data)
+                                        setServicio(servResp.data)
                     setTitle(servResp.data.servicio)
                     setLoading(false)
                 })

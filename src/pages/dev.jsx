@@ -16,8 +16,7 @@ export default function Dev() {
 
     const handleFileChange = (acceptedFiles) => {
         setFiles(acceptedFiles);
-        console.log("Selected files:", acceptedFiles);
-    };
+            };
 
     const handleUpload = async () => {
         if (!files.length) {
@@ -39,8 +38,7 @@ export default function Dev() {
                     headers: { "Content-Type": "multipart/form-data" },
                 }
             );
-            console.log("Upload response:", response.data);
-            setFiles([]);
+                        setFiles([]);
         } catch (err) {
             console.error("Upload error:", err.response?.data || err.message);
             setUploadError(err.response?.data?.error || "Failed to upload");

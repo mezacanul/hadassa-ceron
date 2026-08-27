@@ -31,8 +31,7 @@ export default function SearchParams({
                         ...selected,
                         fecha: e.target.value,
                     });
-                    console.log(e.target.value);
-                }}
+                                    }}
             />
             <MySelect
                 value={selected.servicio}

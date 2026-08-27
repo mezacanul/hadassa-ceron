@@ -27,15 +27,13 @@ export default function DatosForm({
     const handleActualizarDatos = () => {
         setActualizarStatus("updating");
         // return
-        console.log(clientaForm);
-        axios
+                axios
             .patch(`/api/clientas/${clienta.id}`, {
                 type: "batch",
                 payload: clientaForm,
             })
             .then((axiosResp) => {
-                console.log(axiosResp);
-                const resp = axiosResp.data;
+                                const resp = axiosResp.data;
                 if (
                     resp.success &&
                     resp.affectedRows == 1
@@ -50,8 +48,7 @@ export default function DatosForm({
                 }
             })
             .catch((err) => {
-                console.log(err);
-                setActualizarStatus("error");
+                                setActualizarStatus("error");
             });
     };
 

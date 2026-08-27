@@ -46,13 +46,11 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     if (usuario && usuario.username) {
       API.horarios.getAll().then((horariosResp) => {
-        console.log("horariosResp", horariosResp);
-        setHorarios(horariosResp.data);
+                setHorarios(horariosResp.data);
       });
       setLoading(false);
       API.clientas.getClientas().then((clientasResp) => {
-        console.log("clientasResp", clientasResp);
-        setClientas(clientasResp.data);
+                setClientas(clientasResp.data);
       });
     }
   }, [usuario]);

@@ -107,8 +107,7 @@ async function getByMultipleFilters(reqQuery) {
   fullQuery = `${fullQuery} ORDER BY STR_TO_DATE(fecha, '%d-%m-%Y') DESC, lashista DESC, hora DESC`;
 
   const [rows] = await pool.query(fullQuery, params);
-  console.log("repository", rows);
-  return rows;
+    return rows;
 }
 
 async function createCita(cita, uuid, hora) {

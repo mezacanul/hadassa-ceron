@@ -33,24 +33,20 @@ export default async function handler(req, res) {
   try {
     if (req.method === "GET") {
       if (req.query.clienta) {
-        console.log("GET BY CLIENTA");
-        const rows = await citasController.getByClientaID(req);
+                const rows = await citasController.getByClientaID(req);
         res.status(200).json(rows);
       }
       if (req.query.id) {
-        console.log("GET BY ID");
-        const row = await citasController.getByID(req);
+                const row = await citasController.getByID(req);
         res.status(200).json(row);
       } else {
-        console.log("TEST - MULTIPLE");
-        const rows = await citasController.getByMultipleFilters(req);
+                const rows = await citasController.getByMultipleFilters(req);
         res.status(200).json(rows);
       }
     } else if (req.method === "POST" && req.body.fecha) {
       if (req.body.action == "agendar") {
         // const cita = req.body;
-        console.log("AGENDAR");
-        const response = await citasController.createCita(req);
+                const response = await citasController.createCita(req);
         res.status(201).json(response);
       }
 
@@ -139,14 +135,12 @@ export default async function handler(req, res) {
         ]),
       );
 
-      // console.log("eventos before", eventos);
-      eventos = formatEventosForAvailableCalculation(
+            eventos = formatEventosForAvailableCalculation(
         eventos,
         lashista,
         formatFechaYMD(cita.fecha),
       );
-      console.log("eventos after", eventos);
-
+      
       horarioLashista = ["Saturday", "Sunday"].includes(dayName)
         ? lashista.horarioSBD
         : lashista.horarioLV;
@@ -169,12 +163,9 @@ export default async function handler(req, res) {
             break;
         }
       }
-      console.log("horarioLashistaArray", horarioLashistaArray);
-
+      
       // horarioDelDia = filterTimeSlotsByRange(horarioDelDia, horarioLashista)
-      // console.log(lashista.nombre, {horarioDelDia, lashista});
-      // console.log("Filtrado", filterTimeSlotsByRange(horarioDelDia, horarioLashista));
-
+            
       // citaDetalles = {
       //     hora: cita.hora,
       //     duracion: servicios[cita.servicio_id].minutos,
@@ -222,8 +213,7 @@ export default async function handler(req, res) {
           servicios,
           req.body.dev,
         );
-        // console.log("available", available);
-
+        
         let availableArr = refineHorarios(available, camasKeys);
         availableArr = sortByHora(availableArr);
 
@@ -237,8 +227,7 @@ export default async function handler(req, res) {
               minutosCita,
             );
 
-            // console.log(availableArr, servicios[cita.servicio_id], eventSlotsBackwards);
-
+            
             availableArr = availableArr.filter((available) => {
               return !eventSlots.includes(available.hora);
             });
@@ -248,9 +237,7 @@ export default async function handler(req, res) {
           }
         }
 
-        console.log("TEST - YES DEV");
-        // console.log();
-        // eventos,
+                        // eventos,
         // servicios[cita.servicio_id],
         // availableArr
         // horariosDispPorCama
@@ -267,8 +254,7 @@ export default async function handler(req, res) {
           servicios,
         );
 
-        console.log("TEST - NO DEV");
-
+        
         // Final response
         res.status(200).json(available);
       } else {

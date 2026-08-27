@@ -117,8 +117,7 @@ function getColumnDefinitions(primaryColor, labels) {
 }
 
 function HorariosCell({ value }) {
-    // console.log("value", typeof value, value);
-    return (
+        return (
         <VStack>
             {typeof value != "string" &&
                 value.map((hr) => {
@@ -150,8 +149,7 @@ function getHorasByType(params) {
     if (tipo == "horas-libres") {
         return `${hora_init} - ${hora_fin}`;
     } else if (tipo == "cambio-horario") {
-        // console.log("horarios", JSON.parse(horarios));
-        const formattedHorarios = JSON.parse(horarios).map(
+                const formattedHorarios = JSON.parse(horarios).map(
             (hr) => {
                 return formatHorario(hr);
             }

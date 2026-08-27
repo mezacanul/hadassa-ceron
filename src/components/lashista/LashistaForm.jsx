@@ -16,21 +16,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  decodeHorario,
-  encodeHorarios,
-} from "@/utils/main";
+import { decodeHorario, encodeHorarios } from "@/utils/main";
 import { addMinutes, format } from "date-fns";
 import { loadHook } from "@/utils/lattice-design";
 import LashistasService from "@/services/lashistas";
 
-export default function LashistaForm({
-  lashista,
-  fetchLashista,
-}) {
+export default function LashistaForm({ lashista, fetchLashista }) {
   const [horarios] = loadHook("useHorarios");
-  const [actualizarStatus, setActualizarStatus] =
-    useState("iddle");
+  const [actualizarStatus, setActualizarStatus] = useState("iddle");
   const [lashistaForm, setLashistaForm] = useState({
     nombre: "",
     email: "",
@@ -52,13 +45,10 @@ export default function LashistaForm({
         .split("-")
         .map((hora) => hora.replace(" ", "")),
     };
-    // console.log("incoming", incoming);
     setLashistaForm(incoming);
   }, []);
 
-  useEffect(() => {
-    console.log(lashistaForm);
-  }, [lashistaForm]);
+  useEffect(() => {}, [lashistaForm]);
 
   function actualizarLashista() {
     setActualizarStatus("updating");
@@ -67,36 +57,25 @@ export default function LashistaForm({
       horarioLV: JSON.stringify(lashistaForm.horarioLV),
       horarioSBD: `${lashistaForm.horarioSBD[0]} - ${lashistaForm.horarioSBD[1]}`,
     };
-    console.log("lashista", lashista);
-    console.log("send", send);
     axios
       .patch(`/api/lashistas/${lashista.id}`, {
         type: "batch",
         payload: send,
       })
       .then((axiosResp) => {
-        console.log(axiosResp);
         setActualizarStatus("success");
         fetchLashista();
       })
       .catch((error) => {
-        console.log(error);
         setActualizarStatus("error");
       });
   }
 
   function toggleLashistaStatus() {
     setActualizarStatus("updating");
-    LashistasService.toggleLashistaStatus(
-      lashista.id,
-      lashista.isDeleted
-    )
+    LashistasService.toggleLashistaStatus(lashista.id, lashista.isDeleted)
       .then((response) => {
-        console.log(response);
-        if (
-          response.success &&
-          response.affectedRows == 1
-        ) {
+        if (response.success && response.affectedRows == 1) {
           setActualizarStatus("success");
           fetchLashista();
           setIsOpen(false);
@@ -105,22 +84,16 @@ export default function LashistaForm({
         }
       })
       .catch((error) => {
-        console.log(error);
         setActualizarStatus("error");
       });
   }
 
   const addHorario = () => {
-    // console.log("horarios", horarios);
-    const horariosLV = horarios.filter(
-      (horario) => horario.clave == "LV"
-    )[0];
-    // console.log("horariosLV", horariosLV);
+    const horariosLV = horarios.filter((horario) => horario.clave == "LV")[0];
 
-    const decodedHorarios = lashistaForm.horarioLV.map(
-      (horario) => decodeHorario(horario)
+    const decodedHorarios = lashistaForm.horarioLV.map((horario) =>
+      decodeHorario(horario),
     );
-    console.log("decodedHorarios", decodedHorarios);
 
     const l1 = decodedHorarios[decodedHorarios.length - 1];
     const l11 = l1[l1.length - 1];
@@ -131,15 +104,8 @@ export default function LashistaForm({
     const newTime = addMinutes(baseDate, 30);
     const fNewTime = format(newTime, "HH:mm");
 
-    const newHorarios = [
-      ...decodedHorarios,
-      [fNewTime, horariosLV.final],
-    ];
+    const newHorarios = [...decodedHorarios, [fNewTime, horariosLV.final]];
 
-    console.log(
-      encodeHorarios(newHorarios),
-      lashistaForm.horarioLV
-    );
     setLashistaForm({
       ...lashistaForm,
       horarioLV: encodeHorarios(newHorarios),
@@ -159,17 +125,8 @@ export default function LashistaForm({
 
   return (
     <>
-      <VStack
-        alignItems={"start"}
-        w={"100%"}
-        gap={"1.5rem"}
-        mb={"5rem"}
-      >
-        <Grid
-          w={"100%"}
-          gridTemplateColumns={"1fr 1fr"}
-          gap={"1rem"}
-        >
+      <VStack alignItems={"start"} w={"100%"} gap={"1.5rem"} mb={"5rem"}>
+        <Grid w={"100%"} gridTemplateColumns={"1fr 1fr"} gap={"1rem"}>
           <InputGroup
             label={"Nombre"}
             value={lashistaForm.nombre}
@@ -204,11 +161,7 @@ export default function LashistaForm({
         </Grid>
 
         {/* Horario LV Selector  */}
-        <VStack
-          alignItems={"start"}
-          w={"100%"}
-          gap={"1rem"}
-        >
+        <VStack alignItems={"start"} w={"100%"} gap={"1rem"}>
           <Text
             mb={"0.5rem"}
             fontWeight={600}
@@ -274,10 +227,8 @@ export default function LashistaForm({
                   }}
                   lashistaForm={lashistaForm}
                   onChange={(newValue) => {
-                    const newHorario =
-                      lashistaForm.horarioSBD;
-                    newHorario[i] =
-                      newValue.format("HH:mm");
+                    const newHorario = lashistaForm.horarioSBD;
+                    newHorario[i] = newValue.format("HH:mm");
                     setLashistaForm({
                       ...lashistaForm,
                       horarioSBD: newHorario,
@@ -290,28 +241,19 @@ export default function LashistaForm({
 
         <HStack gap={"1rem"} w={"100%"}>
           {actualizarStatus != "updating" && (
-            <HStack
-              justifyContent={"space-between"}
-              w={"100%"}
-            >
+            <HStack justifyContent={"space-between"} w={"100%"}>
               <Button
                 fontWeight={800}
                 bg={"white"}
                 shadow={"md"}
                 variant={"outline"}
-                colorPalette={
-                  lashista.isDeleted ? "green" : "red"
-                }
+                colorPalette={lashista.isDeleted ? "green" : "red"}
                 _hover={{
-                  bg: lashista.isDeleted
-                    ? "green.50"
-                    : "red.50",
+                  bg: lashista.isDeleted ? "green.50" : "red.50",
                 }}
                 onClick={() => setIsOpen(true)}
               >
-                {lashista.isDeleted
-                  ? "Habilitar"
-                  : "Deshabilitar"}
+                {lashista.isDeleted ? "Habilitar" : "Deshabilitar"}
               </Button>
               <Button
                 onClick={actualizarLashista}
@@ -329,19 +271,13 @@ export default function LashistaForm({
         </HStack>
 
         {actualizarStatus == "success" && (
-          <Text color={"green"}>
-            ¡Lashista Actualizada Exitosamente!
-          </Text>
+          <Text color={"green"}>¡Lashista Actualizada Exitosamente!</Text>
         )}
         {actualizarStatus == "error" && (
           <Text color={"red"}>Error al actualizar</Text>
         )}
         {actualizarStatus == "updating" && (
-          <Spinner
-            size={"lg"}
-            borderWidth={"3px"}
-            color={"blue.600"}
-          />
+          <Spinner size={"lg"} borderWidth={"3px"} color={"blue.600"} />
         )}
       </VStack>
       <ModalToggleLashistaStatus
@@ -363,23 +299,14 @@ function TimeSelector({
   index,
 }) {
   //Array of [ "HH:mm", ... ]
-  const [horariosArr, setHorariosArr] = useState(
-    decodeHorario(horarios)
-  );
+  const [horariosArr, setHorariosArr] = useState(decodeHorario(horarios));
 
   function handleChange(newValue, index, i) {
-    // console.log(newValue.format("HH:mm"), index, i);
-
     let newHorarioLV = horariosArr;
     newHorarioLV[i] = newValue.format("HH:mm");
 
     let newSlotsLV = lashistaForm.horarioLV;
-    newSlotsLV[
-      index
-    ] = `${newHorarioLV[0]} - ${newHorarioLV[1]}`;
-
-    // console.log(newSlotsLV);
-    // console.log(lashistaForm.horarioLV);
+    newSlotsLV[index] = `${newHorarioLV[0]} - ${newHorarioLV[1]}`;
 
     setHorariosArr(newHorarioLV);
     setLashistaForm({
@@ -388,9 +315,7 @@ function TimeSelector({
     });
   }
 
-  useEffect(() => {
-    console.log("horariosArr", horariosArr);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <HStack w={"100%"}>
@@ -412,44 +337,23 @@ function TimeSelector({
   );
 }
 
-function TimePickMUI({
-  label,
-  value,
-  onChange,
-  loc,
-  lashistaForm,
-}) {
+function TimePickMUI({ label, value, onChange, loc, lashistaForm }) {
   // const formattedValue = dayjs(`2025-01-01T${value}`)
-  const [valueMUI, setValueMUI] = useState(
-    formatHourMUI(value)
-  );
+  const [valueMUI, setValueMUI] = useState(formatHourMUI(value));
 
   useEffect(() => {
     if (lashistaForm) {
-      // console.log(lashistaForm.horarioLV);
-
       if (loc.period == "LV") {
-        const decodedHorarioLV = lashistaForm.horarioLV.map(
-          (horario) => {
-            return horario
-              .split("-")
-              .map((hora) => hora.replace(" ", ""));
-          }
-        );
-        const newVal = formatHourMUI(
-          decodedHorarioLV[loc.index][loc.i]
-        );
+        const decodedHorarioLV = lashistaForm.horarioLV.map((horario) => {
+          return horario.split("-").map((hora) => hora.replace(" ", ""));
+        });
+        const newVal = formatHourMUI(decodedHorarioLV[loc.index][loc.i]);
         setValueMUI(newVal);
-        // console.log(newVal);
       }
 
       if (loc.period == "SBD") {
-        const newVal = formatHourMUI(
-          lashistaForm.horarioSBD[loc.i]
-        );
-        // console.log(lashistaForm.horarioSBD[loc.i]);
+        const newVal = formatHourMUI(lashistaForm.horarioSBD[loc.i]);
         setValueMUI(newVal);
-        // console.log(lashistaForm.horarioSBD[loc.i]);
       }
     }
   }, [lashistaForm]);
@@ -518,15 +422,13 @@ function ModalToggleLashistaStatus({
           <Dialog.Content>
             <Dialog.Header>
               <Text fontWeight={600} fontSize={"1rem"}>
-                {isDeleted ? "Habilitar" : "Deshabilitar"}{" "}
-                Lashista
+                {isDeleted ? "Habilitar" : "Deshabilitar"} Lashista
               </Text>
             </Dialog.Header>
             <Dialog.Body>
               <Text fontSize={"1rem"}>
                 ¿Estás seguro de querer{" "}
-                {isDeleted ? "habilitar" : "deshabilitar"}{" "}
-                esta lashista?
+                {isDeleted ? "habilitar" : "deshabilitar"} esta lashista?
               </Text>
 
               {isDeleted === 0 && (
@@ -536,15 +438,9 @@ function ModalToggleLashistaStatus({
                   alignItems={"start"}
                   color={"gray.600"}
                 >
+                  <Text>{"- Ya no podrás asignar citas a esta lashista."}</Text>
                   <Text>
-                    {
-                      "- Ya no podrás asignar citas a esta lashista."
-                    }
-                  </Text>
-                  <Text>
-                    {
-                      "- Las citas pendientes de esta lashista se mantendrán."
-                    }
+                    {"- Las citas pendientes de esta lashista se mantendrán."}
                   </Text>
                 </VStack>
               )}

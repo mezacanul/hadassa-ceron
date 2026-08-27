@@ -35,8 +35,7 @@ export default function Login() {
     API.login
       .iniciarSesion(form.username, form.password)
       .then((resp) => {
-        console.log(resp);
-        setLoading(true);
+                setLoading(true);
         setTimeout(() => {
           setLoading(false);
           setUsuario(resp.data);
@@ -45,15 +44,13 @@ export default function Login() {
         }, 500);
       })
       .catch((err) => {
-        console.log(err);
-        setError(err.response.data.error);
+                setError(err.response.data.error);
         setIsLoading(false);
       });
   };
 
   const onEnterPress = (e) => {
-    console.log(e.key);
-    if (e.key === "Enter") {
+        if (e.key === "Enter") {
       handleSubmit();
     }
   };

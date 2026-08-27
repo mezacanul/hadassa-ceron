@@ -33,31 +33,25 @@ export default function EventoCard({
 
     useEffect(() => {
         if (evento.tipo == "cambio-horario") {
-            console.log("evento.horarios", evento.horarios);
-
+            
             let horarios = decodeJSONToHorarioObjects(
                 evento.horarios
             );
-            console.log(horarios);
-            setHorarios(horarios);
+                        setHorarios(horarios);
         }
 
-        console.log(evento);
-    }, [evento]);
+            }, [evento]);
 
     useEffect(() => {
-        console.log("horarios", horarios);
-    }, [horarios]);
+            }, [horarios]);
 
     function handleCancelar() {
-        console.log(evento.id);
-        // return
+                // return
         setStatus("loading");
         axios
             .patch(`/api/eventos?id=${evento.id}`)
             .then((axiosResp) => {
-                console.log(axiosResp);
-                const resp = axiosResp.data;
+                                const resp = axiosResp.data;
                 if (resp.success && resp.affectedRows > 0) {
                     handleBack(true);
                 }

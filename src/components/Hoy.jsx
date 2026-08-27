@@ -34,8 +34,7 @@ export default function Hoy() {
     // -- DEV: When selectDate updates for the first time, it is the same as today
     if (selectedDate == null) {
       const formattedToday = format(new Date(), "yyyy-MM-dd");
-      console.log("formattedToday", formattedToday);
-      setSelectedDate(formattedToday);
+            setSelectedDate(formattedToday);
     }
     axios.get("/api/servicios").then((serviciosResp) => {
       setServicios(serviciosResp.data);
@@ -47,8 +46,7 @@ export default function Hoy() {
       // return;
       setCitas(null);
       setEventos(null);
-      console.log("Date updated! ->", selectedDate);
-      try {
+            try {
         // Use setTimeout to defer the state update to a microtask
         setTimeout(() => {
           Promise.all([
@@ -61,13 +59,7 @@ export default function Hoy() {
               eventosResp,
               // lashistasResp,
             ]) => {
-              console.log(
-                "Responses",
-                eventosResp.data,
-                citasResp.data,
-                // lashistasResp.data
-              );
-
+              
               setEventos(eventosResp.data);
               const sortedCitas = sortByHora(citasResp.data);
               setCitas(sortedCitas);
@@ -75,8 +67,7 @@ export default function Hoy() {
               // setLashistas(
               //     lashistasResp.data
               // );
-              console.log("Updated Today's View");
-            },
+                          },
           );
         }, 0);
       } catch (error) {

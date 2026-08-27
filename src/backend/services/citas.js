@@ -19,8 +19,7 @@ async function getByMultipleFilters(reqQuery) {
 async function createCita(cita) {
   const [uuid] = await utilsRepository.generateUUID();
   const { id } = uuid;
-  console.log(id, cita);
-
+  
   const hora = cita.horario.hora.replace("-", "").replace("+", "");
 
   const mysql_response = await citasRepository.createCita(cita, id, hora);

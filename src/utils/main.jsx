@@ -9,8 +9,7 @@ import { toZonedTime } from "date-fns-tz";
 
 function formatHoyTitle(date) {
     if (date == null) return date;
-    // console.log("hoy title", date);
-    // const gmtString = date.date.marker.toGMTString(); // e.g., "Thu, 04 Apr 2025 00:00:00 GMT"
+        // const gmtString = date.date.marker.toGMTString(); // e.g., "Thu, 04 Apr 2025 00:00:00 GMT"
 
     const gmtString = new Date(date).toGMTString(); // e.g., "Thu, 04 Apr 2025 00:00:00 GMT"
     const parts = gmtString.split(" ");
@@ -85,8 +84,7 @@ function parseQueryFilters(query, filterMap) {
 }
 
 function formatCamaID(camaID) {
-    // console.log(camaID.split("-"));
-
+    
     const camaArray = camaID.split("-");
     return `${capitalizeFirst(camaArray[0])} ${
         camaArray[2]
@@ -169,8 +167,7 @@ function getHorarioByDayNumber(lashista, todayNumber) {
 
         return horarioJSON;
     } catch (error) {
-        console.log(error);
-    }
+            }
 }
 
 function getMinutes(startTime, endTime) {
@@ -227,11 +224,7 @@ function formatEventos(
             });
         });
     }
-    // console.log(
-    //     "eventos con cambio de horario",
-    //     formattedCambioHorario
-    // );
-
+    
     let eventos = eventsArr.filter((ev) => {
         return ev.tipo != "cambio-horario";
     });
@@ -322,8 +315,7 @@ function addMinutesToTime(timeStr, minutes) {
 
     // Add minutes using date-fns
     const newDate = addMinutes(date, minutes);
-    // console.log(timeStr, minutes, newDate);
-
+    
     // Format back to HH:mm
     return format(newDate, "HH:mm");
 }

@@ -18,9 +18,7 @@ function createWhatsAppUrl(cita, tipo) {
 
 function createMessage(cita, tipo) {
   const spanishDate = formatSpanishDate(cita.fecha);
-  console.log("spanishDate", spanishDate);
-  console.log("cita", cita);
-
+    
   let message = "";
   if (tipo == "confirmacion") {
     message = `Confirmo tu cita del día *${spanishDate} a la${

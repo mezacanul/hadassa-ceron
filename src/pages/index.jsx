@@ -15,8 +15,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    console.log("mounted at home", selectedDate);
-    // const formattedToday = format(new Date(), "yyyy-MM-dd");
+        // const formattedToday = format(new Date(), "yyyy-MM-dd");
     // if(selectedDate != formattedToday){
     //     setSelectedDate(formattedToday)
     // }

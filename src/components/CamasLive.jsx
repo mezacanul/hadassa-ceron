@@ -32,8 +32,7 @@ export default function CamasLive() {
                 status: data.active ? 0 : 1,
             };
             API.live.update(payload).then((updatedResp) => {
-                console.log("updatedResp", updatedResp);
-
+                
                 const mappedUpdatedResp = mapLiveFeed(
                     updatedResp.data
                 );
@@ -56,8 +55,7 @@ export default function CamasLive() {
             const mappedLiveFeed = mapLiveFeed(
                 liveResp.data
             );
-            console.log("mappedLiveFeed", mappedLiveFeed);
-            setLiveFeed(mappedLiveFeed);
+                        setLiveFeed(mappedLiveFeed);
             setIsLoading(false);
         });
     }

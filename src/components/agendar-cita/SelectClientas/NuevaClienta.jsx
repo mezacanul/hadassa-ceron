@@ -60,12 +60,10 @@ export default function NuevaClienta({
             return;
         }
 
-        console.log(nuevaClienta);
-        return axios
+                return axios
             .post("/api/clientas", nuevaClienta)
             .then((nuevaClientaResp) => {
-                console.log(nuevaClientaResp.data);
-                if (
+                                if (
                     nuevaClientaResp.status == 201 &&
                     nuevaClientaResp.data.uuid
                 ) {

@@ -25,8 +25,7 @@ export default function ImagenesTicket({ cita }) {
   }, [cita.status]);
 
   useEffect(() => {
-    console.log(cita);
-  }, []);
+      }, []);
 
   return (
     <VStack w={"100%"} gap={"0.5rem"} align={"start"}>

@@ -27,7 +27,6 @@ export default function AccionesTicket({ cita, setCita }) {
   const [mp, setMp] = useMetodoPago();
 
   useEffect(() => {
-    console.log(cita);
     setMp([]);
   }, []);
 
@@ -39,7 +38,6 @@ export default function AccionesTicket({ cita, setCita }) {
         value: 2,
       })
       .then((updateResp) => {
-        console.log(updateResp);
         const resp = updateResp.data;
         if (resp.success && resp.affectedRows == 1) {
           setCita({ ...cita, status: 2 });
@@ -58,7 +56,6 @@ export default function AccionesTicket({ cita, setCita }) {
         value: 0,
       })
       .then((updateResp) => {
-        console.log(updateResp);
         const resp = updateResp.data;
         if (resp.success && resp.affectedRows == 1) {
           setCita({ ...cita, status: 0 });
@@ -78,13 +75,11 @@ export default function AccionesTicket({ cita, setCita }) {
       metodoPago: mp[0],
       precio: mp[0] == "efectivo" ? cita.precio : cita.precio_tarjeta,
     };
-    console.log(send);
     // return
     axios
       // .patch(`/api/citas/${cita.cita_ID}`, { column: "pagado", value: 1 })
       .patch(`/api/citas/${cita.cita_ID}`, send)
       .then((updateResp) => {
-        console.log(updateResp);
         const resp = updateResp.data;
         if (resp.success && resp.affectedRows == 1) {
           setCita({
@@ -95,7 +90,6 @@ export default function AccionesTicket({ cita, setCita }) {
               mp[0] == "efectivo" ? cita.precio : cita.precio_tarjeta,
             metodo_pago: mp[0],
           });
-          console.log();
         } else {
           alert("Error");
         }
@@ -156,7 +150,6 @@ export default function AccionesTicket({ cita, setCita }) {
             href={whatsappUtils.createWhatsAppUrl(cita, "recordatorio")}
             target="_blank"
             {...buttonStyles}
-            colorPalette={"green"}
           >
             <Button {...buttonStyles} colorPalette={"green"} w={"100%"}>
               {"Recordatorio"}

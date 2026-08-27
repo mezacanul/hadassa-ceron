@@ -64,8 +64,7 @@ export default function ModalAccionesCita({
   const handleConfirmarCita = () => {
     setCurrentView("loading");
     API.citas.confirmarCita(cita.cita_ID).then((resp) => {
-      console.log("confirmar cita:", resp);
-      if (resp.status == 200 && resp.data.affectedRows == 1) {
+            if (resp.status == 200 && resp.data.affectedRows == 1) {
         setCurrentView("success");
         setCita({ ...cita, status: 2 });
         const updatedCitas = citas.map((citaObj) => {
@@ -89,8 +88,7 @@ export default function ModalAccionesCita({
     try {
       const resp = await API.citas.pagarCita(citaID, mp, precio);
 
-      console.log("pagar cita:", resp);
-      const updatedCitas = citas.map((citaObj) => {
+            const updatedCitas = citas.map((citaObj) => {
         if (citaObj.cita_ID === citaID) {
           const updatedObj = {
             ...citaObj,
@@ -108,8 +106,7 @@ export default function ModalAccionesCita({
       setCitas(updatedCitas);
       return { success: true };
     } catch (err) {
-      console.log("error pagar cita:", err);
-      alert("Error al pagar cita");
+            alert("Error al pagar cita");
       return { success: false };
     }
   };
@@ -118,8 +115,7 @@ export default function ModalAccionesCita({
     try {
       const resp = await API.citas.cancelCita(cita.cita_ID);
 
-      console.log("cancelar cita:", resp);
-      const updatedCitas = citas.filter((citaObj) => {
+            const updatedCitas = citas.filter((citaObj) => {
         return citaObj.cita_ID !== cita.cita_ID;
       });
       setCitas(updatedCitas);

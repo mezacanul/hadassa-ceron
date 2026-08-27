@@ -69,8 +69,7 @@ function getHorariosOcupadosPorServicio(
   servicios,
   horarioDelDia
 ) {
-  // console.log(horarioDelDia);
-
+  
   const indexHoraCita = horarioDelDia.indexOf(cita.hora);
   // const indexHoraCita = horariosDeCama.indexOf(cita.hora);
   // const intervalosOcupados = detallesServicio.minutos / 30;
@@ -106,8 +105,7 @@ function getHorariosOcupadosPorServicio(
      */
     reglasDeServicio: reglasDeAgenda,
   };
-  // console.log(response);
-  return response;
+    return response;
 }
 
 function getSlots(cita, horarioDelDia, servicios) {
@@ -199,9 +197,6 @@ function puedeAgendar(horariosCama, slots, directiva) {
     }
   }
 
-  // if (slots[0] == "09:30") {
-  //     console.log(slots, pass);
-  // }
   return pass;
 }
 
@@ -249,14 +244,12 @@ function GenerarHorariosDisponibles(
       citasPorCama[currentID] = [];
     }
 
-    // console.log(citasPorCama);
-
+    
     // 3.- Lopeamos cada CITA para:
     // - Eliminar todos los horarios ocupados en 1ra cama
     // - Aplicar las reglas correspondientes en 2a cama
     citasPorCama[currentID].forEach((cita) => {
-      // console.log(horariosDispPorCama[currentID]);
-
+      
       // Eliminamos todos los horarios ocupados
       // en 1ra cama por default
       // en 2a cama si unica directiva es [1]
@@ -265,8 +258,7 @@ function GenerarHorariosDisponibles(
           horariosDispPorCama[currentID] =
             horariosDispPorCama[currentID].filter(
               (horario1aCama) => {
-                // console.log(currentID, horarioOcupado1aCama, horario1aCama);
-                // return horarioOcupado1aCama != horario1aCama
+                                // return horarioOcupado1aCama != horario1aCama
                 let hora = horario1aCama.replace("+", "");
                 // if(cita.reglasDeServicio[0] != 0){
                 //     hora = hora.replace("-", "")
@@ -370,12 +362,10 @@ function getAvailable(
     // Loopeamos cada cama
     camasKeys.forEach((camaID) => {
       const horariosCama = horariosDispPorCama[camaID];
-      // console.log(camaID, horariosCama);
-
+      
       // Loopeamos cada hora disponible
       horariosCama.forEach((hora) => {
-        // console.log(hora);
-        const horaClean = hora
+                const horaClean = hora
           .replace("+", "")
           .replace("-", "");
         const slots = getSlots(
@@ -392,8 +382,7 @@ function getAvailable(
         ) {
           // available.push(hora);
           if (!registry.includes(hora) && !dev) {
-            // console.log({ cama: camaID, hora });
-            available.push({
+                        available.push({
               cama: camaID,
               hora,
             });
@@ -416,8 +405,7 @@ function getAvailable(
       return available;
     }
   } catch (error) {
-    console.log("error", error);
-    return "error in getAvailable";
+        return "error in getAvailable";
   }
 }
 

@@ -38,8 +38,7 @@ export function Singleton(initialState) {
     const setSharedState = (newState) => {
         sharedState =
             typeof newState === "function" ? newState(sharedState) : newState;
-        // console.log("Singleton: State updated", sharedState);
-        listeners.forEach((listener) => listener(sharedState));
+                listeners.forEach((listener) => listener(sharedState));
     };
 
     function useSharedContext() {

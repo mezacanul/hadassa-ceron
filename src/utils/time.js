@@ -62,8 +62,7 @@ function getTimeSlotOptions(
     current += 30;
   }
 
-  // console.log("slots", slots);
-  return slots;
+    return slots;
 }
 
 export {

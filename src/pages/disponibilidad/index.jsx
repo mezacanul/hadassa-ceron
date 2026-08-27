@@ -83,10 +83,8 @@ export default function Disponibilidad() {
             );
             const newTitle =
                 getSemana(formattedFecha).titulo;
-            console.log(newTitle);
-            setTitle(newTitle);
-            // console.log(daysSemana);
-        }
+                        setTitle(newTitle);
+                    }
     }, [selected.fecha]);
 
     function onVerDisponibilidad() {
@@ -95,9 +93,7 @@ export default function Disponibilidad() {
         const formattedFecha = formatFechaDMY(fecha);
         const daysSemana = getSemana(formattedFecha);
         const { titulo } = daysSemana;
-        // console.log(selected.fecha);
-        // console.log(formattedFecha);
-
+                
         setCurrent({
             lashista,
             servicio,
@@ -115,8 +111,7 @@ export default function Disponibilidad() {
             });
         });
         Promise.all(promises).then((responses) => {
-            // console.log(responses);
-            const agendaSemanal = responses.map(
+                        const agendaSemanal = responses.map(
                 (response, idx) => {
                     return {
                         disponibles: [...response.data],
@@ -125,8 +120,7 @@ export default function Disponibilidad() {
                     };
                 }
             );
-            console.log(agendaSemanal);
-            setAgendaSemanal(agendaSemanal);
+                        setAgendaSemanal(agendaSemanal);
             transition.end();
         });
     }
@@ -157,8 +151,7 @@ export default function Disponibilidad() {
             ),
         };
         setCurrentCita(cita);
-        console.log(cita);
-        router.push(`/nueva-cita/${cita.fecha}`);
+                router.push(`/nueva-cita/${cita.fecha}`);
     };
 
     return (

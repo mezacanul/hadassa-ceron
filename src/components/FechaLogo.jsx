@@ -10,8 +10,7 @@ export default function FechaLogo({ selectedDate }) {
     useEffect(() => {
         if (selectedDate) {
             const dateObj = getDateObject(selectedDate)
-            console.log(dateObj);
-            setDateObj(dateObj)
+                        setDateObj(dateObj)
         }
     }, [selectedDate])
     return (

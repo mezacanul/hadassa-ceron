@@ -38,8 +38,7 @@ export default function NavBar({ h }) {
   const [agendarLoading, setAgendarLoading] = useAgendarLoading();
 
   useEffect(() => {
-    console.log("route", router);
-  }, [router]);
+      }, [router]);
 
   useEffect(() => {
     setDOM({ title: PathnameToTitle[router.pathname] });
@@ -47,12 +46,10 @@ export default function NavBar({ h }) {
 
   function goToAgendar() {
     setLoading(true);
-    console.log("events", events);
-
+    
     const parsedDate = parse(selectedDate, "yyyy-MM-dd", new Date());
     const formattedDate = format(parsedDate, "dd-MM-yyyy");
-    console.log(selectedDate, parsedDate, formattedDate);
-    // console.log(formattedDate); // "26-04-2025"
+        // "26-04-2025"
     NextNav.push(`/nueva-cita/${formattedDate}`);
   }
 

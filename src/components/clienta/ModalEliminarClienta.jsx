@@ -30,8 +30,7 @@ export default function ModalEliminarClienta({
         axios
             .get(`/api/citas?clienta=${clientaID}`)
             .then((citasResp) => {
-                console.log(citasResp.data);
-                const citasFiltradas =
+                                const citasFiltradas =
                     citasResp.data.filter(returnPendientes);
                 setCitas(citasFiltradas);
                 setLoading(false);
@@ -62,13 +61,11 @@ export default function ModalEliminarClienta({
 
         const isTodayOrAfter = citaDate >= todayMX;
 
-        console.log(citaDate, todayMX, isTodayOrAfter);
-        return isTodayOrAfter && cita.status != 0;
+                return isTodayOrAfter && cita.status != 0;
     }
 
     function handleEliminarClienta() {
-        console.log("Eliminar Clienta");
-        setLoading(true);
+                setLoading(true);
         const clientaID = clientaToDelete.id;
         const citasIDs = citas.map((cita) => cita.id);
 
@@ -79,8 +76,7 @@ export default function ModalEliminarClienta({
             ),
         ];
         Promise.all(promiseCalls).then((responses) => {
-            console.log(responses);
-            setClientas(
+                        setClientas(
                 clientas.filter(
                     (clienta) => clienta.id !== clientaID
                 )

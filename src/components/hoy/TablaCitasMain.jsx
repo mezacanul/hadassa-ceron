@@ -37,11 +37,9 @@ export default function TablaCitasMain({
   };
 
   const updateEnServicio = async (cita_ID, enServicio) => {
-    console.log(cita_ID, enServicio);
-    const resp = await API.citas.actualizarEnServicio(cita_ID, enServicio);
+        const resp = await API.citas.actualizarEnServicio(cita_ID, enServicio);
     if (resp.data.success && resp.data.affectedRows == 1) {
-      console.log("resp", resp);
-      const updatedObject = citas.find((cita) => cita.cita_ID === cita_ID);
+            const updatedObject = citas.find((cita) => cita.cita_ID === cita_ID);
       updatedObject.en_servicio = enServicio;
       const updatedArray = citas.map((cita) =>
         cita.cita_ID === cita_ID ? updatedObject : cita,
@@ -49,13 +47,11 @@ export default function TablaCitasMain({
       setCitas(updatedArray);
       return true;
     } else {
-      console.log("error", resp);
-      return false;
+            return false;
     }
 
     // .then((resp) => {
-    // console.log(resp);
-    // });
+        // });
   };
 
   return (

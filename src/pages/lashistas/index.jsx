@@ -1,8 +1,5 @@
 import { loadHook } from "@/utils/lattice-design";
-import {
-  capitalizeFirst,
-  formatHorario,
-} from "@/utils/main";
+import { capitalizeFirst, formatHorario } from "@/utils/main";
 import {
   Badge,
   Box,
@@ -27,13 +24,10 @@ export default function Lashistas() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/api/lashistas?fetchAll=true")
-      .then((lashistasResp) => {
-        //   console.log(lashistasResp.data);
-        setLashistas(lashistasResp.data);
-        setLoading(false);
-      });
+    axios.get("/api/lashistas?fetchAll=true").then((lashistasResp) => {
+      setLashistas(lashistasResp.data);
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -54,9 +48,7 @@ export default function Lashistas() {
           setLashistas={setLashistas}
         />
 
-        {lashistas && (
-          <LashistasTable lashistas={lashistas} />
-        )}
+        {lashistas && <LashistasTable lashistas={lashistas} />}
       </Box>
     </Box>
   );
@@ -72,21 +64,13 @@ function LashistasTable({ lashistas }) {
     >
       <Table.Header>
         <Table.Row bg={"pink.500"}>
-          <Table.ColumnHeader
-            color={"white"}
-          ></Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"}>
-            Lashista
-          </Table.ColumnHeader>
+          <Table.ColumnHeader color={"white"}></Table.ColumnHeader>
+          <Table.ColumnHeader color={"white"}>Lashista</Table.ColumnHeader>
           <Table.ColumnHeader color={"white"}>
             Lunes a Viernes
           </Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"}>
-            Sábado
-          </Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"}>
-            Rol
-          </Table.ColumnHeader>
+          <Table.ColumnHeader color={"white"}>Sábado</Table.ColumnHeader>
+          <Table.ColumnHeader color={"white"}>Rol</Table.ColumnHeader>
           {/* <Table.ColumnHeader color={"white"}>
                         Acciones
                     </Table.ColumnHeader> */}
@@ -132,35 +116,22 @@ function LashistaRow({ lashista }) {
       <Table.Cell>
         <VStack alignItems={"start"}>
           <Heading size={"md"}>{lashista.nombre}</Heading>
-          <Badge
-            colorPalette={
-              lashista.isDeleted ? "gray" : "green"
-            }
-          >
-            {lashista.isDeleted
-              ? "Deshabilitada"
-              : "Habilitada"}
+          <Badge colorPalette={lashista.isDeleted ? "gray" : "green"}>
+            {lashista.isDeleted ? "Deshabilitada" : "Habilitada"}
           </Badge>
         </VStack>
       </Table.Cell>
       <Table.Cell>
         {horariosLV.map((hr) => {
           return (
-            <Text
-              mb={horariosLV.length > 1 ? "1rem" : ""}
-              key={hr}
-            >
+            <Text mb={horariosLV.length > 1 ? "1rem" : ""} key={hr}>
               {formatHorario(hr)}
             </Text>
           );
         })}
       </Table.Cell>
-      <Table.Cell>
-        {formatHorario(lashista.horarioSBD)}
-      </Table.Cell>
-      <Table.Cell fontWeight={700}>
-        {capitalizeFirst(lashista.rol)}
-      </Table.Cell>
+      <Table.Cell>{formatHorario(lashista.horarioSBD)}</Table.Cell>
+      <Table.Cell fontWeight={700}>{capitalizeFirst(lashista.rol)}</Table.Cell>
     </Table.Row>
   );
 }

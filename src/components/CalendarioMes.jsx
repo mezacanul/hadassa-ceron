@@ -1,14 +1,14 @@
 import {
-    Avatar,
-    Box,
-    Button,
-    Card,
-    Dialog,
-    Link,
-    Portal,
-    Select,
-    Text,
-    VStack,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Dialog,
+  Link,
+  Portal,
+  Select,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -30,392 +30,316 @@ import { FaHouse } from "react-icons/fa6";
 // import interactionPlugin from '@fullcalendar/interaction';
 
 export default function CalendarioMes() {
-    const calendarRef = useRef(null);
-    const router = useRouter();
-    const [openDialogue, setOpenDialogue] = useState(false);
-    // const [selectedDate, setSelectedDate] = useState("");
-    const [displayedMonthIndex, setDisplayedMonthIndex] =
-        useState(new Date().getMonth());
-    const [selectedDate, setSelectedDate] = loadHook(
-        "useSelectedDate"
-    );
-    // const [hoyRef, setHoyRef] = useHoyRef()
-    // const [calendarControl ] = useCalendarControl();
+  const calendarRef = useRef(null);
+  const router = useRouter();
+  const [openDialogue, setOpenDialogue] = useState(false);
+  // const [selectedDate, setSelectedDate] = useState("");
+  const [displayedMonthIndex, setDisplayedMonthIndex] = useState(
+    new Date().getMonth(),
+  );
+  const [selectedDate, setSelectedDate] = loadHook("useSelectedDate");
+  // const [hoyRef, setHoyRef] = useHoyRef()
+  // const [calendarControl ] = useCalendarControl();
 
-    useEffect(() => {
-        if (calendarRef.current && selectedDate) {
-            goToSelectedDate(selectedDate);
-            setTimeout(() => {
-                const el = document.querySelector(
-                    `.fc-daygrid-day[data-date="${selectedDate}"]`
-                );
-                showSelectedDate(el);
-            }, 100);
-        }
-    }, [calendarRef.current]);
+  useEffect(() => {
+    if (calendarRef.current && selectedDate) {
+      goToSelectedDate(selectedDate);
+      setTimeout(() => {
+        const el = document.querySelector(
+          `.fc-daygrid-day[data-date="${selectedDate}"]`,
+        );
+        showSelectedDate(el);
+      }, 100);
+    }
+  }, [calendarRef.current]);
 
-    const formatDateTitleOnMonthCalendar = (date) => {
-        const monthNames = [
-            "Enero",
-            "Febrero",
-            "Marzo",
-            "Abril",
-            "Mayo",
-            "Junio",
-            "Julio",
-            "Agosto",
-            "Septiembre",
-            "Octubre",
-            "Noviembre",
-            "Diciembre",
-        ];
-        // console.log("Displayed Year: ", date.date.year);
+  const formatDateTitleOnMonthCalendar = (date) => {
+    const monthNames = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
 
-        const month = monthNames[displayedMonthIndex];
-        const year = date.date.year;
-        return `${month} de ${year}`;
-    };
+    const month = monthNames[displayedMonthIndex];
+    const year = date.date.year;
+    return `${month} de ${year}`;
+  };
 
-    // useEffect(() => {
-    //     if (calendarRef.current && selectedDate) {
-    //         console.log("Go to", selectedDate);
-    //         goToSelectedDate(selectedDate);
-    //     }
-    // }, [calendarRef.current]);
+  useEffect(() => {}, [displayedMonthIndex]);
 
-    useEffect(() => {
-        // console.log("Displayed Month Index: ", displayedMonthIndex);
-    }, [displayedMonthIndex]);
+  function showSelectedDate(el) {
+    document.querySelectorAll("td.fc-daygrid-day").forEach((td) => {
+      td.classList.remove("day-clicked");
+    });
+    el.classList.add("day-clicked");
+  }
 
-    function showSelectedDate(el) {
-        document
-            .querySelectorAll("td.fc-daygrid-day")
-            .forEach((td) => {
-                td.classList.remove("day-clicked");
+  function goToSelectedDate(selectedDate) {
+    calendarRef.current.getApi().gotoDate(selectedDate);
+  }
+
+  return (
+    <VStack id="MesCalendar">
+      <Box width="100%">
+        <style>{DayGridStyles}</style>
+        <style>{MesCalendarStyles}</style>
+        <FullCalendar
+          // initialDate={new Date("25-04-2025")}
+          ref={calendarRef}
+          selectable={true}
+          dayCellContent={DayBox(
+            router,
+            displayedMonthIndex,
+            selectedDate,
+            <IoMdToday />,
+          )}
+          // events={events}
+          datesSet={(dateInfo) => {
+            setDisplayedMonthIndex(dateInfo.view.currentStart.getMonth()); // Update on month change
+          }}
+          height="40vh"
+          contentHeight="30vh"
+          aspectRatio={1.5}
+          plugins={[dayGridPlugin]}
+          initialView="dayGridMonth"
+          weekends={true}
+          hiddenDays={[0]}
+          locales={[esLocale]} // Include the Spanish locale
+          titleFormat={formatDateTitleOnMonthCalendar}
+          customButtons={{
+            today: {
+              text: "Hoy",
+              click: function () {
+                calendarRef.current.getApi().today(); // Default "today" behavior
+                setSelectedDate(null);
+                // Your callback
+                // Add your custom logic here
+              },
+            },
+          }}
+          dayCellDidMount={(info) => {
+            // Check if date is today and add class on mount
+            const today = new Date();
+            const formattedToday = format(today, "yyyy-MM-dd");
+            const formattedDate = format(info.date, "yyyy-MM-dd");
+            if (formattedDate === formattedToday) {
+              info.el.classList.add("day-clicked");
+            }
+
+            info.el.addEventListener("click", () => {
+              const formattedDate = format(info.date, "yyyy-MM-dd");
+              setSelectedDate(formattedDate);
+              showSelectedDate(info.el);
             });
-        el.classList.add("day-clicked");
-    }
-
-    function goToSelectedDate(selectedDate) {
-        calendarRef.current.getApi().gotoDate(selectedDate);
-    }
-
-    return (
-        <VStack id="MesCalendar">
-            <Box width="100%">
-                <style>{DayGridStyles}</style>
-                <style>{MesCalendarStyles}</style>
-                <FullCalendar
-                    // initialDate={new Date("25-04-2025")}
-                    ref={calendarRef}
-                    selectable={true}
-                    dayCellContent={DayBox(
-                        router,
-                        displayedMonthIndex,
-                        selectedDate,
-                        <IoMdToday />
-                    )}
-                    // events={events}
-                    datesSet={(dateInfo) => {
-                        setDisplayedMonthIndex(
-                            dateInfo.view.currentStart.getMonth()
-                        ); // Update on month change
-                    }}
-                    height="40vh"
-                    contentHeight="30vh"
-                    aspectRatio={1.5}
-                    plugins={[dayGridPlugin]}
-                    initialView="dayGridMonth"
-                    weekends={true}
-                    hiddenDays={[0]}
-                    locales={[esLocale]} // Include the Spanish locale
-                    titleFormat={
-                        formatDateTitleOnMonthCalendar
-                    }
-                    customButtons={{
-                        today: {
-                            text: "Hoy",
-                            click: function () {
-                                calendarRef.current
-                                    .getApi()
-                                    .today(); // Default "today" behavior
-                                setSelectedDate(null);
-                                console.log(
-                                    "Today button clicked!"
-                                ); // Your callback
-                                // Add your custom logic here
-                            },
-                        },
-                    }}
-                    dayCellDidMount={(info) => {
-                        // Check if date is today and add class on mount
-                        const today = new Date();
-                        const formattedToday = format(
-                            today,
-                            "yyyy-MM-dd"
-                        );
-                        const formattedDate = format(
-                            info.date,
-                            "yyyy-MM-dd"
-                        );
-                        if (
-                            formattedDate === formattedToday
-                        ) {
-                            info.el.classList.add(
-                                "day-clicked"
-                            );
-                        }
-
-                        info.el.addEventListener(
-                            "click",
-                            () => {
-                                const formattedDate =
-                                    format(
-                                        info.date,
-                                        "yyyy-MM-dd"
-                                    );
-                                setSelectedDate(
-                                    formattedDate
-                                );
-                                showSelectedDate(info.el);
-
-                                console.log(
-                                    "INFO",
-                                    info,
-                                    info.el
-                                );
-                            }
-                        );
-                    }}
-                    eventClick={(info) => {
-                        console.log("info", info);
-                    }}
-                    viewDidMount={(info) => {
-                        if (selectedDate) {
-                            // goToSelectedDate();
-                            // setTimeout(() => {
-                            const dayCell =
-                                document.querySelector(
-                                    `.fc-daygrid-day[data-date="${selectedDate}"]`
-                                );
-                            if (dayCell) {
-                                showSelectedDate(dayCell);
-                            }
-                            // }, 100);
-                        }
-                        // goToSelectedDate();
-                    }}
-                />
-            </Box>
-        </VStack>
-        // </Dialog.Root>
-    );
+          }}
+          eventClick={(info) => {}}
+          viewDidMount={(info) => {
+            if (selectedDate) {
+              // goToSelectedDate();
+              // setTimeout(() => {
+              const dayCell = document.querySelector(
+                `.fc-daygrid-day[data-date="${selectedDate}"]`,
+              );
+              if (dayCell) {
+                showSelectedDate(dayCell);
+              }
+              // }, 100);
+            }
+            // goToSelectedDate();
+          }}
+        />
+      </Box>
+    </VStack>
+    // </Dialog.Root>
+  );
 }
 
 function renderEventContent(eventInfo) {
-    let color =
-        eventInfo.event.title == "Disponible"
-            ? "#198754"
-            : "#6c757d";
-    return (
-        <Box
-            bg={color}
-            p={"0.2rem"}
-        >
-            <Text>{eventInfo.event.title}</Text>
-        </Box>
-    );
+  let color = eventInfo.event.title == "Disponible" ? "#198754" : "#6c757d";
+  return (
+    <Box bg={color} p={"0.2rem"}>
+      <Text>{eventInfo.event.title}</Text>
+    </Box>
+  );
 }
 
 const DayBox = (router) => (info) => {
-    // console.log("day cell info", info);
-    const formattedDate = format(info.date, "yyyy-MM-dd");
-    const today = format(new Date(), "yyyy-MM-dd");
-    // console.log("today", today, formattedDate);
+  const formattedDate = format(info.date, "yyyy-MM-dd");
+  const today = format(new Date(), "yyyy-MM-dd");
 
-    return (
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "0.2rem",
-                paddingTop: "0.1rem",
-            }}
-        >
-            <span
-                style={{
-                    fontSize: "0.8rem",
-                }}
-            >
-                {today == formattedDate && <FaHouse />}
-            </span>
-            <p style={{ fontSize: "0.9rem" }}>{info.dayNumberText}</p>
-        </div>
-    );
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "0.2rem",
+        paddingTop: "0.1rem",
+      }}
+    >
+      <span
+        style={{
+          fontSize: "0.8rem",
+        }}
+      >
+        {today == formattedDate && <FaHouse />}
+      </span>
+      <p style={{ fontSize: "0.9rem" }}>{info.dayNumberText}</p>
+    </div>
+  );
 };
 
-function AgendarCitaModal({
-    setOpenDialogue,
-    selectedDate,
-    data,
-}) {
-    return (
-        <Portal>
-            <Dialog.Backdrop />
-            <Dialog.Positioner>
-                <Dialog.Content
-                    py={"3rem"}
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                >
-                    <Dialog.Header>
-                        <Dialog.Title>
-                            Agendar Nueva Cita
-                        </Dialog.Title>
-                    </Dialog.Header>
+function AgendarCitaModal({ setOpenDialogue, selectedDate, data }) {
+  return (
+    <Portal>
+      <Dialog.Backdrop />
+      <Dialog.Positioner>
+        <Dialog.Content
+          py={"3rem"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Dialog.Header>
+            <Dialog.Title>Agendar Nueva Cita</Dialog.Title>
+          </Dialog.Header>
 
-                    <CitaForm
-                        selectedDate={selectedDate}
-                        setOpenDialogue={setOpenDialogue}
-                    />
-                </Dialog.Content>
-            </Dialog.Positioner>
-        </Portal>
-    );
+          <CitaForm
+            selectedDate={selectedDate}
+            setOpenDialogue={setOpenDialogue}
+          />
+        </Dialog.Content>
+      </Dialog.Positioner>
+    </Portal>
+  );
 }
 
 function CitaForm({ selectedDate, setOpenDialogue }) {
-    return (
-        <Dialog.Body w={"30vw"}>
-            <Card.Root>
-                <Card.Body
-                    gap="4"
-                    w={"30vw"}
-                    mb={"2rem"}
-                >
-                    <Card.Title mt="2">
-                        {selectedDate}
-                    </Card.Title>
-                    <Card.Description>
-                        <p>Servicio</p>
-                        <select>
-                            <option value="test">
-                                test
-                            </option>
-                        </select>
-                    </Card.Description>
-                    <Card.Description>
-                        <b>Lashista:</b> TEST
-                    </Card.Description>
-                    <Card.Description>
-                        <b>Hora:</b> TEST
-                    </Card.Description>
-                </Card.Body>
+  return (
+    <Dialog.Body w={"30vw"}>
+      <Card.Root>
+        <Card.Body gap="4" w={"30vw"} mb={"2rem"}>
+          <Card.Title mt="2">{selectedDate}</Card.Title>
+          <Card.Description>
+            <p>Servicio</p>
+            <select>
+              <option value="test">test</option>
+            </select>
+          </Card.Description>
+          <Card.Description>
+            <b>Lashista:</b> TEST
+          </Card.Description>
+          <Card.Description>
+            <b>Hora:</b> TEST
+          </Card.Description>
+        </Card.Body>
 
-                <Card.Footer justifyContent="flex-end">
-                    {/* <Button variant="outline">Cerrar</Button> */}
-                    <Button
-                        colorPalette={"yellow"}
-                        onClick={() => {
-                            setOpenDialogue(false);
-                        }}
-                    >
-                        Cancelar
-                    </Button>
-                    <Button
-                        colorPalette={"blue"}
-                        onClick={() => {
-                            setOpenDialogue(false);
-                        }}
-                    >
-                        Guardar
-                    </Button>
-                </Card.Footer>
-            </Card.Root>
-        </Dialog.Body>
-    );
+        <Card.Footer justifyContent="flex-end">
+          {/* <Button variant="outline">Cerrar</Button> */}
+          <Button
+            colorPalette={"yellow"}
+            onClick={() => {
+              setOpenDialogue(false);
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button
+            colorPalette={"blue"}
+            onClick={() => {
+              setOpenDialogue(false);
+            }}
+          >
+            Guardar
+          </Button>
+        </Card.Footer>
+      </Card.Root>
+    </Dialog.Body>
+  );
 }
 
 function renderResourceLabel(info) {
-    return (
-        <div
-            style={{ padding: "8px", textAlign: "center" }}
+  return (
+    <div style={{ padding: "8px", textAlign: "center" }}>
+      <img
+        style={{
+          width: "4rem",
+          marginBottom: "0.5rem",
+        }}
+        src={"img/lashistas/" + info.resource.extendedProps.src}
+      />
+      <p
+        style={{
+          marginBottom: "0.5rem",
+          fontWeight: "300",
+          fontSize: "1.2rem",
+        }}
+      >
+        {info.resource.title}
+      </p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <LuBedSingle
+          style={{
+            fontSize: "1.4rem",
+            color: "rgb(228, 129, 167)",
+          }}
+        />
+        <span
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            marginLeft: "0.3rem",
+            color: "rgb(228, 129, 167)",
+          }}
         >
-            <img
-                style={{
-                    width: "4rem",
-                    marginBottom: "0.5rem",
-                }}
-                src={
-                    "img/lashistas/" +
-                    info.resource.extendedProps.src
-                }
-            />
-            <p
-                style={{
-                    marginBottom: "0.5rem",
-                    fontWeight: "300",
-                    fontSize: "1.2rem",
-                }}
-            >
-                {info.resource.title}
-            </p>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                <LuBedSingle
-                    style={{
-                        fontSize: "1.4rem",
-                        color: "rgb(228, 129, 167)",
-                    }}
-                />
-                <span
-                    style={{
-                        fontSize: "1.2rem",
-                        fontWeight: "bold",
-                        marginLeft: "0.3rem",
-                        color: "rgb(228, 129, 167)",
-                    }}
-                >
-                    - {info.resource.id.slice(-1)}
-                </span>
-            </div>
-        </div>
-    );
+          - {info.resource.id.slice(-1)}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 const events = [
-    { title: "Lleno", start: "2025-03-03" },
-    { title: "Lleno", start: "2025-03-04" },
-    { title: "Disponible", start: "2025-03-05" },
-    { title: "Disponible", start: "2025-03-06" },
-    { title: "Lleno", start: "2025-03-07" },
+  { title: "Lleno", start: "2025-03-03" },
+  { title: "Lleno", start: "2025-03-04" },
+  { title: "Disponible", start: "2025-03-05" },
+  { title: "Disponible", start: "2025-03-06" },
+  { title: "Lleno", start: "2025-03-07" },
 
-    { title: "Disponible", start: "2025-03-10" },
-    { title: "Disponible", start: "2025-03-11" },
-    { title: "Lleno", start: "2025-03-12" },
-    { title: "Disponible", start: "2025-03-13" },
-    { title: "Lleno", start: "2025-03-14" },
+  { title: "Disponible", start: "2025-03-10" },
+  { title: "Disponible", start: "2025-03-11" },
+  { title: "Lleno", start: "2025-03-12" },
+  { title: "Disponible", start: "2025-03-13" },
+  { title: "Lleno", start: "2025-03-14" },
 
-    { title: "Disponible", start: "2025-03-17" },
-    { title: "Disponible", start: "2025-03-18" },
-    { title: "Lleno", start: "2025-03-19" },
-    { title: "Disponible", start: "2025-03-20" },
-    { title: "Disponible", start: "2025-03-21" },
+  { title: "Disponible", start: "2025-03-17" },
+  { title: "Disponible", start: "2025-03-18" },
+  { title: "Lleno", start: "2025-03-19" },
+  { title: "Disponible", start: "2025-03-20" },
+  { title: "Disponible", start: "2025-03-21" },
 
-    { title: "Disponible", start: "2025-03-24" },
-    { title: "Lleno", start: "2025-03-25" },
-    { title: "Disponible", start: "2025-03-26" },
-    { title: "Disponible", start: "2025-03-27" },
-    { title: "Lleno", start: "2025-03-28" },
+  { title: "Disponible", start: "2025-03-24" },
+  { title: "Lleno", start: "2025-03-25" },
+  { title: "Disponible", start: "2025-03-26" },
+  { title: "Disponible", start: "2025-03-27" },
+  { title: "Lleno", start: "2025-03-28" },
 
-    { title: "Disponible", start: "2025-03-31" },
+  { title: "Disponible", start: "2025-03-31" },
 ];
 
 const MesCalendarStyles = `

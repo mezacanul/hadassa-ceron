@@ -14,16 +14,14 @@ export default function SelectCama({
     const [camas, setCamas] = useState(null)
 
     useEffect(() => {
-        console.log(lashistaID, camaID);
-
+        
         axios.get(`/api/camas?lashista=${lashistaID}`)
             .then((axiosResp) => {
                 let items = axiosResp.data.map((cama => {
                     return { label: formatCamaID(cama.id), value: cama.id }
                 }))
 
-                // console.log(camas);
-                const camasCollection = createListCollection({ items });
+                                const camasCollection = createListCollection({ items });
                 setCamas(camasCollection)
                 setCama([camaID]);
             })

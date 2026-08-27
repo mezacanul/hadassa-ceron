@@ -105,14 +105,9 @@ export default async function handler(req, res) {
                         nuevo_evento.fecha_init,
                     ]
                 );
-            console.log(
-                "cancelAllCurrentEventos",
-                cancelAllCurrentEventos
-            );
-
+            
             // if (cancelAllCurrentEventos.affectedRows > 0) {
-            // console.log("Canceled all current eventos");
-
+            
             switch (nuevo_evento.tipo) {
                 case "horas-libres":
                     sql = `INSERT INTO eventos 

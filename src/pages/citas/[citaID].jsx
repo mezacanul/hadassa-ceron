@@ -31,8 +31,7 @@ export default function Cita() {
   useEffect(() => {
     if (citaID) {
       axios.get(`/api/citas?id=${citaID}`).then((citaResp) => {
-        // console.log("citaRESP", citaResp.data);
-        setCita(citaResp.data);
+                setCita(citaResp.data);
         setLoading(false);
       });
     }

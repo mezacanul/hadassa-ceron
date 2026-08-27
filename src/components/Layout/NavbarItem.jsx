@@ -20,8 +20,7 @@ export default function NavbarItem({ title, pathname }) {
     >
       <Link
         onClick={() => {
-          // console.log("pathname", pathname, router.pathname);
-          // return;
+                    // return;
           setSidebarOpen(false);
           if (router.pathname === pathname) {
             return;

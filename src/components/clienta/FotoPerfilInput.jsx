@@ -11,8 +11,7 @@ export default function FotoPerfilInput({clienta}) {
 
     const handleFileChange = (acceptedFiles) => {
         setFiles(acceptedFiles);
-        // console.log("Selected files:", acceptedFiles);
-    };
+            };
 
     const handleUpload = async () => {
         if (!files.length) {
@@ -34,19 +33,13 @@ export default function FotoPerfilInput({clienta}) {
                 .then((uploadResp) => {
                     const resp = uploadResp.data;
                     if (resp.success && resp.url) {
-                        console.log(resp);
-                        console.log({
-                            clientaID: clienta.id,
-                            foto_url: resp.fileName,
-                        });
-                        axios
+                                                                        axios
                             .patch(`/api/clientas/${clienta.id}`, {
                                 column: "foto_clienta",
                                 value: resp.fileName
                             })
                             .then((uploadResp2) => {
-                                console.log(uploadResp2);
-                                const resp2 = uploadResp2.data
+                                                                const resp2 = uploadResp2.data
                                 if (resp2.success && resp2.affectedRows == 1) {
                                     setFiles([]);
                                     setUploadStatus("success");

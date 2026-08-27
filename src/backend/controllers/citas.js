@@ -11,15 +11,12 @@ async function getByClientaID(req) {
 }
 
 async function getByMultipleFilters(req) {
-  // console.log("controller", req.query);
-  return await citasService.getByMultipleFilters(req.query);
+    return await citasService.getByMultipleFilters(req.query);
 }
 
 async function createCita(req) {
   const cita = req.body;
-  // console.log("CREATE CITA");
-  // console.log(req.body);
-  const mysql_response = await citasService.createCita(cita);
+      const mysql_response = await citasService.createCita(cita);
   const { uuid, affectedRows } = mysql_response;
   if (affectedRows > 0) {
     return {

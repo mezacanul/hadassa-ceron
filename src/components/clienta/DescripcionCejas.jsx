@@ -24,11 +24,8 @@ export default function DescripcionCejas({ clientaID, detalles }) {
         value: detallesCejas,
       })
       .then((clientaResp) => {
-        console.log(clientaResp);
-        const resp = clientaResp.data;
-        console.log("clienta", clientaID);
-        console.log("texto", detallesCejas);
-
+                const resp = clientaResp.data;
+                
         if (resp.success && resp.affectedRows == 1) {
           setUpdateSuccess(true);
           setEnableActualizar(false);

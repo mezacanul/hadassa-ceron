@@ -21,8 +21,7 @@ export default function FotosCejas({ clientaID }) {
                 .then((fcResp) => {
                     setFotosCejas(fcResp.data);
                     setLoading(false);
-                    console.log(fcResp.data);
-                });
+                                    });
         }
     }, [clientaID]);
 

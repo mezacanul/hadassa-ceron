@@ -25,19 +25,16 @@ export default function Clienta() {
 
     useEffect(() => {
         if (router.isReady) {
-            console.log("CID", clientaID);
-            Promise.all([
+                        Promise.all([
                 axios.get(`/api/clientas/${clientaID}`),
                 axios.get(
                     `/api/citas?clienta=${clientaID}`
                 ),
             ]).then(([clientaResp, citasResp]) => {
-                console.log(clientaResp);
-                setClienta(clientaResp.data[0]);
+                                setClienta(clientaResp.data[0]);
                 setLoading(false);
 
-                console.log(citasResp.data);
-                setCitas(citasResp.data);
+                                setCitas(citasResp.data);
             });
         }
     }, [router.isReady]);

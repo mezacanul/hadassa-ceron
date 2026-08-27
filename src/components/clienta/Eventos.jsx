@@ -43,8 +43,7 @@ export default function Eventos({ w, lashistaID }) {
     useEffect(() => {
         // if (router.isReady && currentView == "tabla") {
         // setEventos(null);
-        console.log(lashistaID);
-        fetchEventos();
+                fetchEventos();
         // }
     }, []);
 
@@ -63,14 +62,9 @@ export default function Eventos({ w, lashistaID }) {
         axios
             .get(`/api/eventos?lashista=${lashistaID}`)
             .then((axiosResp) => {
-                console.log(axiosResp);
-                setEventos(axiosResp.data);
+                                setEventos(axiosResp.data);
             });
     }
-
-    // useEffect(() => {
-    //     console.log(currentView);
-    // }, [currentView]);
 
     return (
         <VStack
@@ -157,10 +151,6 @@ function NuevoEvento({
     const [eventoForm, setEventoForm] =
         useState(initialForm);
 
-    useEffect(() => {
-        console.log(new Date());
-    }, []);
-
     function handleAgregar() {
         setStatus("loading");
         const tipo = tipoEvento[0];
@@ -203,17 +193,14 @@ function NuevoEvento({
             tipo,
             horarios: horariosJSON,
         };
-        console.log(formData);
-        // setStatus("success");
+                // setStatus("success");
         // return;
         axios
             .post("/api/eventos", formData)
             .then((axiosResp) => {
                 setStatus("success");
-                console.log(axiosResp);
-            });
-        console.log(formData);
-    }
+                            });
+            }
 
     return (
         <VStack w={"100%"}>
@@ -422,8 +409,7 @@ function FechaEvento({ eventoForm, setEventoForm }) {
                 bg={"white"}
                 type="date"
                 onChange={(e) => {
-                    console.log(e.target.value);
-                    setEventoForm({
+                                        setEventoForm({
                         ...eventoForm,
                         fecha_init: e.target.value,
                     });
@@ -576,8 +562,7 @@ function SelectHorasLibres({ eventoForm, setEventoForm }) {
                                 newValue.format("HH:mm")
                             ),
                         });
-                        console.log(newValue);
-                    }}
+                                            }}
                     timeSteps={{
                         minutes: 30,
                     }}
@@ -601,8 +586,7 @@ function SelectHorasLibres({ eventoForm, setEventoForm }) {
                                 newValue.format("HH:mm")
                             ),
                         });
-                        console.log(newValue);
-                    }}
+                                            }}
                     timeSteps={{
                         minutes: 30,
                     }}

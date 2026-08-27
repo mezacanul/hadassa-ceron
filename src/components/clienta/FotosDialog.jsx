@@ -30,8 +30,7 @@ export function FotosDialog({
 
     const handleFileChange = (acceptedFiles) => {
         setFiles(acceptedFiles);
-        console.log("Selected files:", acceptedFiles);
-    };
+            };
 
     const handleUpload = async () => {
         if (!files.length) {
@@ -48,8 +47,7 @@ export function FotosDialog({
         files.forEach((file, i) => formData.append(`fotoCejas-${i}`, file)); // Match PHP field name
         for (let [key, value] of formData.entries()) {
             if (value instanceof File) {
-                console.log(`Key: ${key}, Name: ${value.name}, Size: ${value.size}, Type: ${value.type}`);
-            }
+                            }
         }
         // return
 
@@ -60,21 +58,15 @@ export function FotosDialog({
                 })
                 .then((uploadResp) => {
                     const resp = uploadResp.data;
-                    // console.log(resp);
-                    // return
+                                        // return
                     // if (resp.success && resp.url) {
                     if (resp.success) {
                         const newFiles = resp.files.map((file) => (
                             { foto: file.fileName }
                             // { foto: "test.jpg" }
                         ))
-                        console.log(newFiles);
-                        // setFotosCejas([...fotosCejas, { foto: resp.fileName }]);
-                        // console.log({
-                        //     clientaID: clientaID,
-                        //     foto_url: resp.fileName,
-                        // });
-                        // return
+                                                // setFotosCejas([...fotosCejas, { foto: resp.fileName }]);
+                                                // return
                         axios
                             .post("/api/fotos_cejas", {
                                 clientaID: clientaID,
@@ -82,8 +74,7 @@ export function FotosDialog({
                                 // foto: resp.fileName,
                             })
                             .then((uploadResp) => {
-                                console.log(uploadResp);
-                                const resp = uploadResp.data
+                                                                const resp = uploadResp.data
                                 if (resp.success) {
                                     setFiles([]);
                                     setUploading(false);
@@ -103,21 +94,18 @@ export function FotosDialog({
 
     function handleEliminarFoto() {
         setDeleteStatus("deleting")
-        console.log(fotoCeja, clientaID);
-        axios
+                axios
             .post(`${CDN}/deleteFotoCejas.php`, { fileName: fotoCeja }, {
                 headers: { "Content-Type": "multipart/form-data" },
             })
             .then((axiosResp) => {
-                console.log(axiosResp);
-                const resp = axiosResp.data
+                                const resp = axiosResp.data
 
                 if(resp.success){
                     axios
                         .delete(`/api/fotos_cejas?clienta_id=${clientaID}&foto=${resp.fileName}`)
                         .then((deleteResp)=>{
-                            console.log(deleteResp);
-                            
+                                                        
                             const resp2 = deleteResp.data
                             if(resp2.success && resp2.affectedRows > 0){
                                 const filteredFotos = fotosCejas.filter((fc)=>{
@@ -125,11 +113,7 @@ export function FotosDialog({
                                 })
                                 setFotosCejas(filteredFotos)
                                 setOpen(false)
-                                console.log(
-                                    resp2.foto, 
-                                    filteredFotos,
-                                );
-                            }
+                                                            }
                             setDeleteStatus("default")
                         })
                 }
@@ -253,8 +237,7 @@ export function FotosDialog({
                             <CloseButton
                                 size="sm"
                                 onClick={() => {
-                                    console.log("closing");
-                                    setUploadSuccess(false);
+                                                                        setUploadSuccess(false);
                                     setTimeout(() => {
                                         setUploading(false)
                                     }, 500);

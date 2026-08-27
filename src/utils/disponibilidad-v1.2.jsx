@@ -64,8 +64,7 @@ function generarHorarioDelDia({ dayName, horariosStudio }) {
         time < endHour;
         time += 0.5
     ) {
-        // console.log(time);
-        workDayHours.push(horaFloatToString(time));
+                workDayHours.push(horaFloatToString(time));
     }
 
     return workDayHours;
@@ -147,8 +146,7 @@ function horarioJSONToFullArray(horarioJSON) {
 function getSemana(date) {
     // Get start and end of the week (Monday to Sunday)
     date = parse(date, "dd-MM-yyyy", new Date());
-    console.log(date);
-    const weekStart = startOfWeek(date, {
+        const weekStart = startOfWeek(date, {
         weekStartsOn: 1,
     }); // 1 = Monday
     const weekEnd = endOfWeek(date, { weekStartsOn: 1 });
@@ -158,8 +156,7 @@ function getSemana(date) {
         start: weekStart,
         end: weekEnd,
     });
-    // console.log(days);
-
+    
     // Transform to your desired shape
     const semana = days.map((day) => ({
         fecha: format(day, "dd-MM-yyyy"), // "11-10-2025"
@@ -172,8 +169,7 @@ function getSemana(date) {
         ),
         anio: getYear(day), // 2025
     }));
-    // console.log(semana);
-
+    
     return {
         dias: semana.slice(0, 6),
         titulo: (

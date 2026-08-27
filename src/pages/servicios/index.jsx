@@ -12,8 +12,7 @@ export default function Servicios() {
 
     useEffect(() => {
         axios.get("/api/servicios").then((serviciosResp) => {
-            console.log(serviciosResp.data);
-            setServicios(serviciosResp.data);
+                        setServicios(serviciosResp.data);
             setLoading(false)
         });
     }, []);

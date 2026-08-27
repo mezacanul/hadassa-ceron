@@ -41,8 +41,7 @@ export default function CalendarioMesV2() {
 
   function handleChange(newValue) {
     const formattedDate = newValue.format("YYYY-MM-DD");
-    console.log("formattedDate", formattedDate);
-
+    
     setSelectedDate(formattedDate);
     setValue(newValue);
   }

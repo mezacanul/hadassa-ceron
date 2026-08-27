@@ -33,13 +33,11 @@ export default function Citas() {
 
     useEffect(() => {
         setLoading(false);
-        // console.log("date", new Date());
-
+        
         axios
             .get("/api/detalles-citas?table=lashistas")
             .then((lashistasResp) => {
-                console.log(lashistasResp.data);
-                setLashistas(lashistasResp.data);
+                                setLashistas(lashistasResp.data);
                 setCurrentLashista(lashistasResp.data[0]);
             });
     }, []);
@@ -83,9 +81,7 @@ function LashistaCard({ data }) {
     const [citasCount, setCitasCount] = useState(null);
 
     useEffect(() => {
-        // console.log(dateInfo);
-        // console.log(currentLashista);
-        axios
+                        axios
             .get(
                 `/api/detalles-citas?table=citas&length=short&lashista=${data.id}`
             )
@@ -161,8 +157,7 @@ function AgendaLashista({ current }) {
     const [past, setPast] = useState(null);
 
     useEffect(() => {
-        console.log("dateinfo", dateInfo);
-    }, []);
+            }, []);
 
     useEffect(() => {
         setThisWeek(null);
@@ -180,14 +175,12 @@ function AgendaLashista({ current }) {
                 //     `/api/detalles-citas?table=citas&length=full&period=past&lashista=${current.id}`
                 // ),
             ]).then(([thisWeekResp, futureResp, pastResp]) => {
-                console.log(thisWeekResp.data.citas);
-
+                
                 setThisWeek(thisWeekResp.data.citas);
                 setFuture(futureResp.data.citas);
                 // setPast(pastResp.data.citas);
             });
-            console.log(current);
-        }
+                    }
     }, [current]);
 
     return (
@@ -224,9 +217,7 @@ function CitasInfo({ title, dateInfo, lashista, data }) {
     // const [citas, setCitas] = useState();
 
     useEffect(() => {
-        console.log(lashista);
-        console.log("data", data);
-        // setCitas(data)
+                        // setCitas(data)
         // if(current){
         //     axios.get()
         // }

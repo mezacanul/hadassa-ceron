@@ -14,8 +14,7 @@ export default function DetallesTicket({ cita }) {
   const fechaFormatted = `${fechaArr[2]}-${fechaArr[1]}-${fechaArr[0]}`;
   const dateObj = getDateObject(fechaFormatted);
   const [mp, setMp] = useMetodoPago();
-  console.log("mp", mp);
-
+  
   return (
     <VStack w={"100%"} gap={"1rem"}>
       <HStack w={"100%"} justify={"space-between"}>
@@ -41,20 +40,6 @@ export default function DetallesTicket({ cita }) {
           {cita.pagado != 1 && mp != "efectivo" && mp != "tarjeta" ? " --" : ""}
         </Text>
       </HStack>
-
-      {/* <HStack w={"100%"} justify={"space-between"}>
-        <Text>Estado:</Text>
-        <Badge
-          p={"0.5rem"}
-          fontWeight={800}
-          fontSize={"0.9rem"}
-          colorPalette={statusBadgeColor}
-        >
-          {cita.status == 2 && "Confirmada"}
-          {cita.status == 1 && "Pendiente"}
-          {cita.status == 0 && "Cancelada"}
-        </Badge>
-      </HStack> */}
 
       <HStack w={"100%"} justify={"space-between"}>
         <Text>Pagado:</Text>

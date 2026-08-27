@@ -13,8 +13,7 @@ export default function ClientaForm({
     );
 
     useEffect(() => {
-        console.log(clienta);
-    }, [clienta]);
+            }, [clienta]);
 
     return (
         <VStack
